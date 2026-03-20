@@ -1,0 +1,8 @@
+# Project exclude paths
+/admin-service/target/
+/api-gateway/target/
+/auth-service/target/
+/eureka-server/target/
+/reward-service/target/
+/user-service/target/
+/wallet-service/target/

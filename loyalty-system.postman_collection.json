@@ -1,0 +1,230 @@
+{
+  "info": {
+    "name": "Loyalty System API Gateway",
+    "_postman_id": "12345-abcde-67890",
+    "description": "All microservices via API Gateway (8080)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080"
+    },
+    {
+      "key": "token",
+      "value": ""
+    },
+    {
+      "key": "userId",
+      "value": "1"
+    },
+    {
+      "key": "adminEmail",
+      "value": "admin@test.com"
+    }
+  ],
+  "item": [
+
+    {
+      "name": "AUTH",
+      "item": [
+        {
+          "name": "Signup",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fullName\": \"Shivam\",\n  \"email\": \"shivam@test.com\",\n  \"phone\": \"9999999999\",\n  \"password\": \"Password@123\"\n}"
+            },
+            "url": "{{baseUrl}}/api/auth/signup"
+          }
+        },
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"shivam@test.com\",\n  \"password\": \"Password@123\"\n}"
+            },
+            "url": "{{baseUrl}}/api/auth/login"
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "USER",
+      "item": [
+        {
+          "name": "Get Profile",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "X-User-Id", "value": "{{userId}}" }
+            ],
+            "url": "{{baseUrl}}/api/users/profile"
+          }
+        },
+        {
+          "name": "Update Profile",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "X-User-Id", "value": "{{userId}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Updated Name\",\n  \"phone\": \"8888888888\"\n}"
+            },
+            "url": "{{baseUrl}}/api/users/profile"
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "KYC",
+      "item": [
+        {
+          "name": "Submit KYC",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "X-User-Id", "value": "{{userId}}" }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "docFile",
+                  "type": "file",
+                  "src": ""
+                }
+              ]
+            },
+            "url": "{{baseUrl}}/api/kyc/submit?docType=AADHAAR&docNumber=123456789012"
+          }
+        },
+        {
+          "name": "KYC Status",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "X-User-Id", "value": "{{userId}}" }
+            ],
+            "url": "{{baseUrl}}/api/kyc/status"
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "ADMIN KYC",
+      "item": [
+        {
+          "name": "Get Pending KYC",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "X-User-Role", "value": "ADMIN" },
+              { "key": "X-User-Email", "value": "{{adminEmail}}" }
+            ],
+            "url": "{{baseUrl}}/api/admin/kyc/pending"
+          }
+        },
+        {
+          "name": "Approve KYC",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "X-User-Role", "value": "ADMIN" },
+              { "key": "X-User-Email", "value": "{{adminEmail}}" }
+            ],
+            "url": "{{baseUrl}}/api/admin/kyc/1/approve"
+          }
+        },
+        {
+          "name": "Reject KYC",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "X-User-Role", "value": "ADMIN" },
+              { "key": "X-User-Email", "value": "{{adminEmail}}" }
+            ],
+            "url": "{{baseUrl}}/api/admin/kyc/1/reject?reason=Invalid"
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "WALLET",
+      "item": [
+        {
+          "name": "Balance",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "X-User-Id", "value": "{{userId}}" }
+            ],
+            "url": "{{baseUrl}}/api/wallet/balance"
+          }
+        },
+        {
+          "name": "Topup",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "X-User-Id", "value": "{{userId}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"amount\": 500\n}"
+            },
+            "url": "{{baseUrl}}/api/wallet/topup"
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "REWARDS",
+      "item": [
+        {
+          "name": "Summary",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "X-User-Id", "value": "{{userId}}" }
+            ],
+            "url": "{{baseUrl}}/rewards/summary"
+          }
+        },
+        {
+          "name": "Catalog",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": "{{baseUrl}}/rewards/catalog"
+          }
+        }
+      ]
+    }
+
+  ]
+}

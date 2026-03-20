@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="92f6b9d7-7fce-4d37-bf8d-4bccb3ec48c5" name="Changes" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Interface" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;Shivamkumar1352&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/Shivamkumar1352/loyaltyService.git&quot;,
+    &quot;accountId&quot;: &quot;8110b45a-b174-4640-a678-0abec1ed22ab&quot;
+  }
+}</component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="mavenHomeTypeForPersistence" value="WRAPPER" />
+      </MavenGeneralSettings>
+    </option>
+  </component>
+  <component name="McpProjectServerCommands">
+    <commands />
+    <urls />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 6
+}</component>
+  <component name="ProjectId" id="3BAOm54wO3UnoX3xv1wMGASOSxE" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.MCP Project settings loaded": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "Spring Boot.admin.executor": "Run",
+    "Spring Boot.apiGateway.executor": "Run",
+    "Spring Boot.auth.executor": "Run",
+    "Spring Boot.eureka.executor": "Run",
+    "Spring Boot.reward.executor": "Run",
+    "Spring Boot.user.executor": "Run",
+    "Spring Boot.wallet.executor": "Run",
+    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
+    "junie.onboarding.icon.badge.shown": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "/Users/shivamkumar/Desktop/loyaltyService/api-gateway/src/main/java/com/loyaltyService/api_gateway",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "to.speed.mode.migration.done": "true"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/api-gateway/src/main/java/com/loyaltyService/api_gateway" />
+      <recent name="$PROJECT_DIR$/reward-service/src/main/java/com/loyaltyService/reward_service" />
+      <recent name="$PROJECT_DIR$/wallet-service/src/main/java/com/loyaltyService/wallet_service" />
+      <recent name="$PROJECT_DIR$/user-service/src/main/java/com/loyaltyService/user_service" />
+      <recent name="$PROJECT_DIR$/auth-service/src/main/java/com/loyaltyService/auth_service" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.loyaltyService.user_service.dto" />
+      <recent name="com.loyaltyService.admin_service.dto" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Spring Boot.reward">
+    <configuration default="true" type="JetRunConfigurationType">
+      <module name="loyaltyService" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <module name="loyaltyService" />
+      <option name="filePath" />
+      <method v="2" />
+    </configuration>
+    <configuration name="admin" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+      <module name="admin-service" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.loyaltyService.admin_service.AdminServiceApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="apiGateway" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+      <module name="api-gateway" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.loyaltyService.api_gateway.ApiGatewayApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="auth" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+      <module name="auth-service" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.loyaltyService.auth_service.AuthServiceApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="eureka" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+      <module name="eureka-server" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.loyaltyService.eureka_server.EurekaServerApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="reward" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+      <module name="reward-service" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.loyaltyService.reward_service.RewardServiceApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="user" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+      <module name="user-service" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.loyaltyService.user_service.UserServiceApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="wallet" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+      <module name="wallet-service" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.loyaltyService.wallet_service.WalletServiceApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <list>
+      <item itemvalue="Spring Boot.eureka" />
+      <item itemvalue="Spring Boot.admin" />
+      <item itemvalue="Spring Boot.auth" />
+      <item itemvalue="Spring Boot.user" />
+      <item itemvalue="Spring Boot.wallet" />
+      <item itemvalue="Spring Boot.reward" />
+      <item itemvalue="Spring Boot.apiGateway" />
+    </list>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-30f59d01ecdd-2fc7cc6b9a17-intellij.indexing.shared.core-IU-253.31033.145" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="92f6b9d7-7fce-4d37-bf8d-4bccb3ec48c5" name="Changes" comment="" />
+      <created>1773928563907</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1773928563907</updated>
+    </task>
+    <servers />
+  </component>
+</project>
