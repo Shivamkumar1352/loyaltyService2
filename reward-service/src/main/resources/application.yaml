@@ -34,11 +34,17 @@ jwt:
 rewards:
   points-per-rupee: 100
   min-redeem-points: 100
+  # FIX: Added daily cap — user cannot redeem more than 5000 points in a single day
+  max-daily-redeem-points: 5000
   tiers:
     gold-threshold: 1000
     platinum-threshold: 5000
   bonus:
     first-topup-points: 100
+
+feign:
+  circuitbreaker:
+    enabled: true
 
 springdoc:
   api-docs:

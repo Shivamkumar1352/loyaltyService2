@@ -53,7 +53,7 @@ spring:
             - id: wallet-service
               uri: lb://wallet-service
               predicates:
-                - Path=/api/wallet/**
+                - Path=/api/wallet/**, /api/payment/**
               filters:
                 - JwtAuthenticationFilter   # ✅ FIXED
                 - name: CircuitBreaker

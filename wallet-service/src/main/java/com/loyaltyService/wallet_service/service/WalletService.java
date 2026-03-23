@@ -112,35 +112,24 @@ public class WalletService {
         LocalDateTime start = LocalDate.now().atStartOfDay();
         LocalDateTime end   = LocalDate.now().atTime(23, 59, 59);
         BigDecimal todayAmt = txnRepo.sumTodayTransfers(senderId,
-                Transaction.TxnType.TRANSFER,
-                Transaction.TxnStatus.SUCCESS,
-                start,
-                end);
+                Transaction.TxnType.TRANSFER, Transaction.TxnStatus.SUCCESS, start, end);
         if (todayAmt.add(amount).compareTo(dailyTransferLimit) > 0)
             throw new WalletException("Daily transfer limit of ₹" + dailyTransferLimit + " exceeded");
         if (txnRepo.countTodayTransfers(senderId,
-                Transaction.TxnType.TRANSFER,
-                Transaction.TxnStatus.SUCCESS,
-                start,
-                end) >= maxDailyTransfers)
+                Transaction.TxnType.TRANSFER, Transaction.TxnStatus.SUCCESS, start, end) >= maxDailyTransfers)
             throw new WalletException("Maximum " + maxDailyTransfers + " transfers per day reached");
 
         String ref = "TXN_" + UUID.randomUUID();
-
-        // LEDGER FIRST — both sides atomically
         ledgerService.record(senderId,   amount, LedgerEntry.EntryType.DEBIT,  ref, description);
         ledgerService.record(receiverId, amount, LedgerEntry.EntryType.CREDIT, ref, description);
-
         sender.debit(amount);
         receiver.credit(amount);
         accountRepo.save(sender);
         accountRepo.save(receiver);
-
         txnRepo.save(Transaction.builder()
-            .senderId(senderId).receiverId(receiverId).amount(amount)
-            .status(Transaction.TxnStatus.SUCCESS).type(Transaction.TxnType.TRANSFER)
-            .referenceId(ref).idempotencyKey(idempotencyKey).description(description).build());
-
+                .senderId(senderId).receiverId(receiverId).amount(amount)
+                .status(Transaction.TxnStatus.SUCCESS).type(Transaction.TxnType.TRANSFER)
+                .referenceId(ref).idempotencyKey(idempotencyKey).description(description).build());
         log.info("Transfer success: from={}, to={}, amount={}, ref={}", senderId, receiverId, amount, ref);
     }
 
@@ -155,22 +144,38 @@ public class WalletService {
         acc.debit(amount);
         accountRepo.save(acc);
         txnRepo.save(Transaction.builder().senderId(userId).amount(amount)
-            .status(Transaction.TxnStatus.SUCCESS).type(Transaction.TxnType.WITHDRAW)
-            .referenceId(ref).build());
+                .status(Transaction.TxnStatus.SUCCESS).type(Transaction.TxnType.WITHDRAW)
+                .referenceId(ref).build());
         log.info("Withdrawal success: userId={}, amount={}, ref={}", userId, amount, ref);
     }
 
     // ── Internal credit (cashback from rewards) ───────────────────────────────
     @Transactional
-    public void creditInternal(Long userId, BigDecimal amount) {
+    public void creditInternal(Long userId, BigDecimal amount, String source) {
         WalletAccount acc = findWallet(userId);
-        String ref = "CASHBACK_" + UUID.randomUUID();
-        ledgerService.record(userId, amount, LedgerEntry.EntryType.CREDIT, ref, "Cashback credit");
+        // FIX: choose correct TxnType based on source so history is readable
+        Transaction.TxnType txnType = "REDEEM".equalsIgnoreCase(source)
+                ? Transaction.TxnType.REDEEM
+                : Transaction.TxnType.CASHBACK;
+        String prefix = txnType == Transaction.TxnType.REDEEM ? "REDEEM_" : "CASHBACK_";
+        String ref = prefix + UUID.randomUUID();
+        String desc = txnType == Transaction.TxnType.REDEEM
+                ? "Points redeemed → ₹" + amount + " credited"
+                : "Cashback credit";
+
+        ledgerService.record(userId, amount, LedgerEntry.EntryType.CREDIT, ref, desc);
         acc.credit(amount);
         accountRepo.save(acc);
         txnRepo.save(Transaction.builder().receiverId(userId).amount(amount)
-            .status(Transaction.TxnStatus.SUCCESS).type(Transaction.TxnType.CASHBACK)
-            .referenceId(ref).build());
+                .status(Transaction.TxnStatus.SUCCESS).type(txnType)
+                .referenceId(ref).description(desc).build());
+        log.info("Internal credit: userId={}, amount={}, type={}", userId, amount, txnType);
+    }
+
+    // ── Status management ─────────────────────────────────────────────────────
+    @Transactional
+    public void creditInternal(Long userId, BigDecimal amount) {
+        creditInternal(userId, amount, "CASHBACK");
     }
 
     // ── Status management ─────────────────────────────────────────────────────
@@ -193,7 +198,7 @@ public class WalletService {
     // ── Helpers ───────────────────────────────────────────────────────────────
     private WalletAccount findWallet(Long userId) {
         return accountRepo.findByUserId(userId)
-            .orElseThrow(() -> new WalletException("Wallet not found for userId: " + userId, HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new WalletException("Wallet not found for userId: " + userId, HttpStatus.NOT_FOUND));
     }
 
     private WalletAccount findActiveWallet(Long userId) {

@@ -53,3 +53,7 @@ logging:
   level:
     com.loyalty.system: DEBUG
     org.springframework.transaction: INFO
+
+razorpay:
+  key: rzp_test_SUZOuIv4WCfba7
+  secret: BUKskE10ipCanhRnZUFi1IN9

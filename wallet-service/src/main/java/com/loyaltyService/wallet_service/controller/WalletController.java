@@ -32,21 +32,13 @@ import java.util.List;
  */
 @Slf4j
 @RestController
-@RequestMapping("/api/wallet")
+@RequestMapping("api/wallet")
 @RequiredArgsConstructor
 @Tag(name = "Wallet", description = "Wallet balance, top-up, transfer, ledger")
-@SecurityRequirement(name = "bearerAuth")
 public class WalletController {
 
     private final WalletService walletService;
     private final LedgerEntryRepository ledgerRepo;
-
-    @PostMapping("/internal/create")
-    public ResponseEntity<ApiResponse<Void>> createWallet(
-            @RequestParam Long userId) {
-        walletService.createWallet(userId);
-        return ResponseEntity.ok(ApiResponse.ok("Wallet created"));
-    }
 
     // ── Balance ───────────────────────────────────────────────────────────────
     @GetMapping("/balance")
@@ -57,7 +49,7 @@ public class WalletController {
     }
 
     // ── Topup ─────────────────────────────────────────────────────────────────
-    @PostMapping("/topup")
+    @PostMapping("/internal/topup")
     @Operation(summary = "Top up wallet")
     public ResponseEntity<ApiResponse<Void>> topup(
             @RequestHeader("X-User-Id") Long userId,
@@ -142,13 +134,26 @@ public class WalletController {
         writer.flush();
     }
 
-    // ── Internal endpoint (service-to-service cashback credit) ───────────────
+    // ── Internal — create wallet for new user ─────────────────────────────────
+    @PostMapping("/internal/create")
+    @Operation(summary = "Internal — create wallet for new user")
+    public ResponseEntity<ApiResponse<Void>> createWallet(
+            @RequestParam Long userId) {
+        walletService.createWallet(userId);
+        return ResponseEntity.ok(ApiResponse.ok("Wallet created successfully"));
+    }
+
+    // ── Internal — credit (cashback or points redemption) ────────────────────
+    // FIX: Added optional `source` param ("REDEEM" | "CASHBACK").
+    //      Defaults to "CASHBACK" for backward compatibility.
+    //      This lets the transaction history distinguish point redemptions from topup cashback.
     @PostMapping("/internal/credit")
-    @Operation(summary = "Internal cashback credit (service-to-service only)")
+    @Operation(summary = "Internal cashback/redeem credit (service-to-service only)")
     public ResponseEntity<ApiResponse<Void>> internalCredit(
             @RequestParam Long userId,
-            @RequestParam java.math.BigDecimal amount) {
-        walletService.creditInternal(userId, amount);
-        return ResponseEntity.ok(ApiResponse.ok("Cashback credited"));
+            @RequestParam java.math.BigDecimal amount,
+            @RequestParam(defaultValue = "CASHBACK") String source) {
+        walletService.creditInternal(userId, amount, source);
+        return ResponseEntity.ok(ApiResponse.ok("Credit applied"));
     }
 }

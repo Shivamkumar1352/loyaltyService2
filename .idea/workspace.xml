@@ -4,7 +4,27 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="92f6b9d7-7fce-4d37-bf8d-4bccb3ec48c5" name="Changes" comment="" />
+    <list default="true" id="92f6b9d7-7fce-4d37-bf8d-4bccb3ec48c5" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/reward-service/src/main/java/com/loyaltyService/reward_service/dto/RewardItemRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/wallet-service/src/main/java/com/loyaltyService/wallet_service/controller/PaymentController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/wallet-service/src/main/java/com/loyaltyService/wallet_service/entity/Payment.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/wallet-service/src/main/java/com/loyaltyService/wallet_service/repository/PaymentRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/wallet-service/src/main/java/com/loyaltyService/wallet_service/service/RazorpayService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api-gateway/src/main/resources/application.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/api-gateway/src/main/resources/application.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/loyalty-system.postman_collection.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reward-service/src/main/java/com/loyaltyService/reward_service/client/WalletClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/reward-service/src/main/java/com/loyaltyService/reward_service/client/WalletClient.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reward-service/src/main/java/com/loyaltyService/reward_service/client/WalletClientFallback.java" beforeDir="false" afterPath="$PROJECT_DIR$/reward-service/src/main/java/com/loyaltyService/reward_service/client/WalletClientFallback.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reward-service/src/main/java/com/loyaltyService/reward_service/controller/RewardController.java" beforeDir="false" afterPath="$PROJECT_DIR$/reward-service/src/main/java/com/loyaltyService/reward_service/controller/RewardController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reward-service/src/main/java/com/loyaltyService/reward_service/repository/RewardTransactionRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/reward-service/src/main/java/com/loyaltyService/reward_service/repository/RewardTransactionRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reward-service/src/main/java/com/loyaltyService/reward_service/service/RewardService.java" beforeDir="false" afterPath="$PROJECT_DIR$/reward-service/src/main/java/com/loyaltyService/reward_service/service/RewardService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reward-service/src/main/resources/application.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/reward-service/src/main/resources/application.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wallet-service/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/wallet-service/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wallet-service/src/main/java/com/loyaltyService/wallet_service/controller/WalletController.java" beforeDir="false" afterPath="$PROJECT_DIR$/wallet-service/src/main/java/com/loyaltyService/wallet_service/controller/WalletController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wallet-service/src/main/java/com/loyaltyService/wallet_service/entity/Transaction.java" beforeDir="false" afterPath="$PROJECT_DIR$/wallet-service/src/main/java/com/loyaltyService/wallet_service/entity/Transaction.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wallet-service/src/main/java/com/loyaltyService/wallet_service/service/WalletService.java" beforeDir="false" afterPath="$PROJECT_DIR$/wallet-service/src/main/java/com/loyaltyService/wallet_service/service/WalletService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wallet-service/src/main/resources/application.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/wallet-service/src/main/resources/application.yaml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -29,7 +49,7 @@
 }</component>
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/Shivamkumar1352/loyaltyService.git&quot;,
+    &quot;url&quot;: &quot;https://github.com/Shivamkumar1352/loyaltyService2.git&quot;,
     &quot;accountId&quot;: &quot;8110b45a-b174-4640-a678-0abec1ed22ab&quot;
   }
 }</component>
@@ -44,6 +64,9 @@
     <commands />
     <urls />
   </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 6
 }</component>
@@ -55,31 +78,32 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RunOnceActivity.MCP Project settings loaded": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "Spring Boot.admin.executor": "Run",
-    "Spring Boot.apiGateway.executor": "Run",
-    "Spring Boot.auth.executor": "Run",
-    "Spring Boot.eureka.executor": "Run",
-    "Spring Boot.reward.executor": "Run",
-    "Spring Boot.user.executor": "Run",
-    "Spring Boot.wallet.executor": "Run",
-    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
-    "junie.onboarding.icon.badge.shown": "true",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "/Users/shivamkumar/Desktop/loyaltyService/api-gateway/src/main/java/com/loyaltyService/api_gateway",
-    "project.structure.last.edited": "Modules",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.2",
-    "to.speed.mode.migration.done": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.MCP Project settings loaded&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;Spring Boot.admin.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.apiGateway.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.auth.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.eureka.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.reward.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.user.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.wallet.executor&quot;: &quot;Run&quot;,
+    &quot;com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/shivamkumar/Desktop/loyaltyService/api-gateway/src/main/java/com/loyaltyService/api_gateway&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/api-gateway/src/main/java/com/loyaltyService/api_gateway" />
@@ -93,7 +117,7 @@
       <recent name="com.loyaltyService.admin_service.dto" />
     </key>
   </component>
-  <component name="RunManager" selected="Spring Boot.reward">
+  <component name="RunManager" selected="Spring Boot.wallet">
     <configuration default="true" type="JetRunConfigurationType">
       <module name="loyaltyService" />
       <method v="2">

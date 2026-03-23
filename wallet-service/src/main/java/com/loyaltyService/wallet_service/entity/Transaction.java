@@ -25,5 +25,5 @@ public class Transaction {
     @Column(name = "description", length = 255) private String description;
     @CreationTimestamp @Column(name = "created_at", nullable = false, updatable = false) private LocalDateTime createdAt;
     public enum TxnStatus { PENDING, SUCCESS, FAILED, REVERSED }
-    public enum TxnType   { TOPUP, TRANSFER, WITHDRAW, CASHBACK }
+    public enum TxnType   { TOPUP, TRANSFER, WITHDRAW, CASHBACK, REDEEM }
 }
