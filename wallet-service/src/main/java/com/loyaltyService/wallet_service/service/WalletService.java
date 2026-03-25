@@ -21,6 +21,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -31,6 +32,7 @@ public class WalletService {
     private final TransactionRepository txnRepo;
     private final LedgerService ledgerService;
     private final RewardClient rewardClient;
+    private final KafkaProducerService kafkaProducer;
 
     @Value("${wallet.daily-topup-limit:50000}") private BigDecimal dailyTopupLimit;
     @Value("${wallet.daily-transfer-limit:25000}") private BigDecimal dailyTransferLimit;
@@ -92,6 +94,13 @@ public class WalletService {
         // Fire-and-forget to rewards service (fallback handles failure gracefully)
         rewardClient.earnPoints(userId, amount);
         log.info("Topup success: userId={}, amount={}, ref={}", userId, amount, ref);
+        kafkaProducer.send("wallet-events", Map.of(
+                "event", "TOPUP_SUCCESS",
+                "userId", userId,
+                "amount", amount,
+                "reference", ref,
+                "balance", acc.getBalance()   // ✅ ADD THIS
+        ));
     }
 
     // ── Transfer ──────────────────────────────────────────────────────────────
@@ -131,6 +140,14 @@ public class WalletService {
                 .status(Transaction.TxnStatus.SUCCESS).type(Transaction.TxnType.TRANSFER)
                 .referenceId(ref).idempotencyKey(idempotencyKey).description(description).build());
         log.info("Transfer success: from={}, to={}, amount={}, ref={}", senderId, receiverId, amount, ref);
+        kafkaProducer.send("wallet-events", Map.of(
+                "event", "TRANSFER_SUCCESS",
+                "senderId", senderId,
+                "receiverId", receiverId,
+                "amount", amount,
+                "reference", ref,
+                "balance", sender.getBalance()
+        ));
     }
 
     // ── Withdraw ──────────────────────────────────────────────────────────────
@@ -147,6 +164,7 @@ public class WalletService {
                 .status(Transaction.TxnStatus.SUCCESS).type(Transaction.TxnType.WITHDRAW)
                 .referenceId(ref).build());
         log.info("Withdrawal success: userId={}, amount={}, ref={}", userId, amount, ref);
+
     }
 
     // ── Internal credit (cashback from rewards) ───────────────────────────────

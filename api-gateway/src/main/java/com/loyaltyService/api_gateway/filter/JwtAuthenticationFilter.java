@@ -52,6 +52,12 @@ public class JwtAuthenticationFilter
 
             ServerHttpRequest request = exchange.getRequest();
 
+            String path = request.getURI().getPath();
+            if (path.contains("/internal/")) {
+                log.debug("Skipping JWT for internal path: {}", path);
+                return chain.filter(exchange);
+            }
+
             // ── 1. Extract token ──────────────────────────────────────────────
             String authHeader = request.getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
 

@@ -41,5 +41,10 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping("/internal/users/{id}")
+    public UserProfileResponse getUserInternal(@PathVariable Long id) {
+        return userService.getProfile(id);
+    }
+
     record CreateUserRequest(Long id, String name, String email, String phone, User.Role role) {}
 }

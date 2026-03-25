@@ -15,6 +15,9 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
+  kafka:
+    producer:
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
 eureka:
   client:
     service-url:

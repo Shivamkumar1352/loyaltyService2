@@ -4,6 +4,7 @@ import com.loyaltyService.wallet_service.dto.*;
 import com.loyaltyService.wallet_service.entity.LedgerEntry;
 import com.loyaltyService.wallet_service.entity.Transaction;
 import com.loyaltyService.wallet_service.repository.LedgerEntryRepository;
+import com.loyaltyService.wallet_service.service.KafkaProducerService;
 import com.loyaltyService.wallet_service.service.WalletService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;

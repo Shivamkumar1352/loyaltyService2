@@ -2,6 +2,7 @@ package com.loyaltyService.wallet_service.controller;
 
 import com.loyaltyService.wallet_service.entity.Payment;
 import com.loyaltyService.wallet_service.repository.PaymentRepository;
+import com.loyaltyService.wallet_service.service.KafkaProducerService;
 import com.loyaltyService.wallet_service.service.RazorpayService;
 import com.loyaltyService.wallet_service.service.WalletService;
 import com.razorpay.Order;
@@ -21,6 +22,7 @@ public class PaymentController {
     private final PaymentRepository paymentRepo;
     private final RazorpayService razorpayService;
     private final WalletService walletService;
+    private final KafkaProducerService kafkaProducer;
 
     @Value("${razorpay.secret}")
     private String secret;
@@ -32,10 +34,9 @@ public class PaymentController {
     ) throws Exception {
 
         Order order = razorpayService.createOrder(userId, amount);
-
         return ResponseEntity.ok(Map.of(
                 "orderId", order.get("id"),
-                "amount", order.get("amount"),
+                "amount(paise)", order.get("amount"),
                 "currency", order.get("currency")
         ));
     }
@@ -62,6 +63,17 @@ public class PaymentController {
         BigDecimal amount = payment.getAmount(); // ✅ real amount
 
         walletService.topup(userId, amount, orderId);
+        payment.setStatus("SUCCESS");
+        paymentRepo.save(payment);
+        BigDecimal updatedBalance = walletService.getBalance(userId).getBalance();
+
+        kafkaProducer.send("payment-events", Map.of(
+                "event", "PAYMENT_SUCCESS",
+                "userId", userId,
+                "amount", amount,
+                "orderId", orderId,
+                "balance", updatedBalance   // 👈 fetch from wallet
+        ));
 
         return ResponseEntity.ok("Payment verified & wallet credited");
     }

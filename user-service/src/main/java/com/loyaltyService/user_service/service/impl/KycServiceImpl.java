@@ -1,6 +1,5 @@
 package com.loyaltyService.user_service.service.impl;
 
-import com.loyaltyService.user_service.client.RewardsServiceClient;
 import com.loyaltyService.user_service.client.WalletServiceClient;
 import com.loyaltyService.user_service.dto.KycStatusResponse;
 import com.loyaltyService.user_service.entity.AuditLog;
@@ -11,6 +10,7 @@ import com.loyaltyService.user_service.exception.ResourceNotFoundException;
 import com.loyaltyService.user_service.repository.AuditLogRepository;
 import com.loyaltyService.user_service.repository.KycRepository;
 import com.loyaltyService.user_service.repository.UserRepository;
+import com.loyaltyService.user_service.service.KafkaProducerService;
 import com.loyaltyService.user_service.service.KycService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,7 +24,9 @@ import java.io.IOException;
 import java.nio.file.*;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.util.UUID;
+import java.util.HashMap;
+import java.util.Map;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -34,7 +36,8 @@ public class KycServiceImpl implements KycService {
     private final KycRepository       kycRepo;
     private final AuditLogRepository  auditRepo;
     private final WalletServiceClient walletServiceClient;
-    private final RewardsServiceClient rewardsServiceClient;
+    private final KafkaProducerService kafkaProducer;
+
 
     @Value("${kyc.upload-dir:uploads/kyc}")
     private String uploadDir;
@@ -161,6 +164,13 @@ public class KycServiceImpl implements KycService {
      * Wallet and reward accounts are created HERE on approval, not on submission.
      */
     private KycStatusResponse doApprove(KycDetail kyc, String adminEmail) {
+
+        if (kyc.getStatus() == KycDetail.KycStatus.APPROVED)
+            throw new DuplicateKycException("KYC already approved");
+
+        if (kyc.getStatus() != KycDetail.KycStatus.PENDING)
+            throw new IllegalStateException("Only pending KYC can be approved");
+
         kyc.setStatus(KycDetail.KycStatus.APPROVED);
         kyc.setReviewedBy(adminEmail);
         KycDetail saved = kycRepo.save(kyc);
@@ -172,6 +182,15 @@ public class KycServiceImpl implements KycService {
                 .entityType("KycDetail").entityId(kyc.getId().toString())
                 .performedBy(adminEmail).build());
 
+        Map<String, Object> event = Map.of(
+                "event", "KYC_APPROVED",
+                "userId", userId,
+                "reference", "KYC_" + kyc.getId(),
+                "status", "APPROVED"
+        );
+
+        kafkaProducer.send("kyc-events", event);
+
         // Create wallet with the SAME userId from auth-service
         try {
             walletServiceClient.createWallet(userId);
@@ -181,18 +200,13 @@ public class KycServiceImpl implements KycService {
         }
 
         // Create reward account with the SAME userId
-        try {
-            rewardsServiceClient.createRewardAccount(userId);
-            log.info("Reward account created for userId={} after KYC approval", userId);
-        } catch (Exception e) {
-            log.error("Failed to create reward account for userId={}", userId, e);
-        }
-
         log.info("KYC approved: kycId={}, userId={}, by={}", kyc.getId(), userId, adminEmail);
         return toResponse(saved);
     }
 
     private KycStatusResponse doReject(KycDetail kyc, String reason, String adminEmail) {
+        if (kyc.getStatus() != KycDetail.KycStatus.PENDING)
+            throw new IllegalStateException("Only pending KYC can be rejected");
         kyc.setStatus(KycDetail.KycStatus.REJECTED);
         kyc.setRejectionReason(reason);
         kyc.setReviewedBy(adminEmail);
@@ -204,6 +218,16 @@ public class KycServiceImpl implements KycService {
                 .performedBy(adminEmail).details("Reason: " + reason).build());
 
         log.info("KYC rejected: kycId={}, userId={}, by={}", kyc.getId(), kyc.getUser().getId(), adminEmail);
+        Long userId = kyc.getUser().getId();
+        Map<String, Object> event = Map.of(
+                "event", "KYC_REJECTED",
+                "userId", userId,
+                "reference", "KYC_" + kyc.getId(),
+                "status", "REJECTED",
+                "reason", reason
+        );
+
+        kafkaProducer.send("kyc-events", event);
         return toResponse(saved);
     }
 

@@ -59,6 +59,10 @@ public class UserServiceImpl implements UserService {
 
     }
 
+    public UserProfileResponse getUserProfile(Long userId) {
+        return getProfile(userId);
+    }
+
     private User findUser(Long id) {
         return userRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("User not found: " + id));
     }

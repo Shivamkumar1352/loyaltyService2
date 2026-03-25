@@ -14,6 +14,7 @@ import com.loyaltyService.reward_service.repository.RewardRepository;
 import com.loyaltyService.reward_service.repository.RewardTransactionRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.kafka.clients.producer.KafkaProducer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Service
@@ -34,7 +36,7 @@ public class RewardService {
     private final RewardItemRepository itemRepo;
     private final RedemptionRepository redemptionRepo;
     private final WalletClient walletClient;
-
+    private final KafkaProducerService kafkaProducer;
     @Value("${rewards.points-per-rupee:100}")       private int pointsPerRupee;
     @Value("${rewards.min-redeem-points:100}")       private int minRedeemPoints;
     @Value("${rewards.max-daily-redeem-points:5000}") private int maxDailyRedeemPoints;  // FIX: new limit
@@ -76,6 +78,12 @@ public class RewardService {
         updateTier(acc);
         rewardRepo.save(acc);
         log.info("Points earned: userId={}, earned={}, total={}", userId, earned, acc.getPoints());
+        kafkaProducer.send("reward-events", Map.of(
+                "event", "POINTS_EARNED",
+                "userId", userId,
+                "amount", earned,
+                "balance", acc.getPoints()
+        ));
     }
 
     // ── ADD CATALOG ITEM ──────────────────────────────────────────────────────

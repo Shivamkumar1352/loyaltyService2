@@ -5,23 +5,38 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="92f6b9d7-7fce-4d37-bf8d-4bccb3ec48c5" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/reward-service/src/main/java/com/loyaltyService/reward_service/dto/RewardItemRequest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wallet-service/src/main/java/com/loyaltyService/wallet_service/controller/PaymentController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wallet-service/src/main/java/com/loyaltyService/wallet_service/entity/Payment.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wallet-service/src/main/java/com/loyaltyService/wallet_service/repository/PaymentRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wallet-service/src/main/java/com/loyaltyService/wallet_service/service/RazorpayService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/admin-service/src/main/java/com/loyaltyService/admin_service/service/impl/AdminDashboardServiceImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/admin-service/src/main/java/com/loyaltyService/admin_service/service/impl/CampaignServiceImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/notification_service/src/main/java/com/loayaltyService/notification_service/client/UserClient.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/notification_service/src/main/java/com/loayaltyService/notification_service/config/KafkaConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/notification_service/src/main/java/com/loayaltyService/notification_service/dto/UserDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/notification_service/src/main/java/com/loayaltyService/notification_service/service/EmailService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/notification_service/src/main/java/com/loayaltyService/notification_service/service/NotificationConsumer.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/reward-service/src/main/java/com/loyaltyService/reward_service/service/KafkaProducerService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/user-service/src/main/java/com/loyaltyService/user_service/service/KafkaProducerService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/user-service/src/main/java/com/loyaltyService/user_service/service/impl/KafkaProducerServiceImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/wallet-service/src/main/java/com/loyaltyService/wallet_service/service/KafkaProducerService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api-gateway/src/main/resources/application.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/api-gateway/src/main/resources/application.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/loyalty-system.postman_collection.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/reward-service/src/main/java/com/loyaltyService/reward_service/client/WalletClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/reward-service/src/main/java/com/loyaltyService/reward_service/client/WalletClient.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/reward-service/src/main/java/com/loyaltyService/reward_service/client/WalletClientFallback.java" beforeDir="false" afterPath="$PROJECT_DIR$/reward-service/src/main/java/com/loyaltyService/reward_service/client/WalletClientFallback.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/reward-service/src/main/java/com/loyaltyService/reward_service/controller/RewardController.java" beforeDir="false" afterPath="$PROJECT_DIR$/reward-service/src/main/java/com/loyaltyService/reward_service/controller/RewardController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/reward-service/src/main/java/com/loyaltyService/reward_service/repository/RewardTransactionRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/reward-service/src/main/java/com/loyaltyService/reward_service/repository/RewardTransactionRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/admin-service/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/admin-service/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api-gateway/src/main/java/com/loyaltyService/api_gateway/filter/JwtAuthenticationFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/api-gateway/src/main/java/com/loyaltyService/api_gateway/filter/JwtAuthenticationFilter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/auth-service/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/auth-service/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reward-service/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/reward-service/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/reward-service/src/main/java/com/loyaltyService/reward_service/service/RewardService.java" beforeDir="false" afterPath="$PROJECT_DIR$/reward-service/src/main/java/com/loyaltyService/reward_service/service/RewardService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/reward-service/src/main/resources/application.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/reward-service/src/main/resources/application.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user-service/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/user-service/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user-service/src/main/java/com/loyaltyService/user_service/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/user-service/src/main/java/com/loyaltyService/user_service/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user-service/src/main/java/com/loyaltyService/user_service/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/user-service/src/main/java/com/loyaltyService/user_service/controller/UserController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user-service/src/main/java/com/loyaltyService/user_service/service/impl/KycServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/user-service/src/main/java/com/loyaltyService/user_service/service/impl/KycServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user-service/src/main/java/com/loyaltyService/user_service/service/impl/UserServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/user-service/src/main/java/com/loyaltyService/user_service/service/impl/UserServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user-service/src/main/resources/application.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/user-service/src/main/resources/application.yaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/wallet-service/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/wallet-service/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wallet-service/src/main/java/com/loyaltyService/wallet_service/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/wallet-service/src/main/java/com/loyaltyService/wallet_service/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wallet-service/src/main/java/com/loyaltyService/wallet_service/controller/PaymentController.java" beforeDir="false" afterPath="$PROJECT_DIR$/wallet-service/src/main/java/com/loyaltyService/wallet_service/controller/PaymentController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/wallet-service/src/main/java/com/loyaltyService/wallet_service/controller/WalletController.java" beforeDir="false" afterPath="$PROJECT_DIR$/wallet-service/src/main/java/com/loyaltyService/wallet_service/controller/WalletController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wallet-service/src/main/java/com/loyaltyService/wallet_service/entity/Transaction.java" beforeDir="false" afterPath="$PROJECT_DIR$/wallet-service/src/main/java/com/loyaltyService/wallet_service/entity/Transaction.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/wallet-service/src/main/java/com/loyaltyService/wallet_service/service/WalletService.java" beforeDir="false" afterPath="$PROJECT_DIR$/wallet-service/src/main/java/com/loyaltyService/wallet_service/service/WalletService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/wallet-service/src/main/resources/application.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/wallet-service/src/main/resources/application.yaml" afterDir="false" />
     </list>
@@ -90,6 +105,7 @@
     &quot;Spring Boot.apiGateway.executor&quot;: &quot;Run&quot;,
     &quot;Spring Boot.auth.executor&quot;: &quot;Run&quot;,
     &quot;Spring Boot.eureka.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.notification.executor&quot;: &quot;Run&quot;,
     &quot;Spring Boot.reward.executor&quot;: &quot;Run&quot;,
     &quot;Spring Boot.user.executor&quot;: &quot;Run&quot;,
     &quot;Spring Boot.wallet.executor&quot;: &quot;Run&quot;,
@@ -101,6 +117,7 @@
     &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
     &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
     &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;ml.llm.AcpAgentsConfigurable&quot;,
     &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;
   }
 }</component>
@@ -117,7 +134,7 @@
       <recent name="com.loyaltyService.admin_service.dto" />
     </key>
   </component>
-  <component name="RunManager" selected="Spring Boot.wallet">
+  <component name="RunManager" selected="Spring Boot.apiGateway">
     <configuration default="true" type="JetRunConfigurationType">
       <module name="loyaltyService" />
       <method v="2">
@@ -157,6 +174,13 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="notification" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+      <module name="notification_service" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.loayaltyService.notification_service.NotificationServiceApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="reward" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
       <module name="reward-service" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="com.loyaltyService.reward_service.RewardServiceApplication" />
@@ -184,6 +208,7 @@
       <item itemvalue="Spring Boot.auth" />
       <item itemvalue="Spring Boot.user" />
       <item itemvalue="Spring Boot.wallet" />
+      <item itemvalue="Spring Boot.notification" />
       <item itemvalue="Spring Boot.reward" />
       <item itemvalue="Spring Boot.apiGateway" />
     </list>

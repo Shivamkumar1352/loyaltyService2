@@ -10,7 +10,16 @@
         <module name="api-gateway" />
         <module name="eureka-server" />
       </profile>
-      <profile name="Annotation profile for wallet-service" enabled="true">
+      <profile name="Annotation profile for notification_service" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="false">
+          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.44/lombok-1.18.44.jar" />
+        </processorPath>
+        <module name="notification_service" />
+      </profile>
+      <profile name="Annotation profile for user-service" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
@@ -19,8 +28,8 @@
         </processorPath>
         <module name="auth-service" />
         <module name="user-service" />
-        <module name="wallet-service" />
         <module name="reward-service" />
+        <module name="wallet-service" />
         <module name="admin-service" />
       </profile>
     </annotationProcessing>
@@ -31,6 +40,7 @@
       <module name="api-gateway" options="-parameters" />
       <module name="auth-service" options="-parameters" />
       <module name="eureka-server" options="-parameters" />
+      <module name="notification_service" options="-parameters" />
       <module name="reward-service" options="-parameters" />
       <module name="user-service" options="-parameters" />
       <module name="wallet-service" options="-parameters" />
