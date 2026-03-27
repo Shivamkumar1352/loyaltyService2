@@ -139,6 +139,7 @@ public class WalletService {
                 .senderId(senderId).receiverId(receiverId).amount(amount)
                 .status(Transaction.TxnStatus.SUCCESS).type(Transaction.TxnType.TRANSFER)
                 .referenceId(ref).idempotencyKey(idempotencyKey).description(description).build());
+        rewardClient.earnPoints(senderId, amount);
         log.info("Transfer success: from={}, to={}, amount={}, ref={}", senderId, receiverId, amount, ref);
         kafkaProducer.send("wallet-events", Map.of(
                 "event", "TRANSFER_SUCCESS",

@@ -4,7 +4,7 @@ import com.loyaltyService.user_service.dto.UpdateUserRequest;
 import com.loyaltyService.user_service.dto.UserProfileResponse;
 import com.loyaltyService.user_service.entity.User;
 
-import java.util.UUID;
+
 public interface UserService {
     UserProfileResponse getProfile(Long userId);
     UserProfileResponse updateProfile(Long userId, UpdateUserRequest req);

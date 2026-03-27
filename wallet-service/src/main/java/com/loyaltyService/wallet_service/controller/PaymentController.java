@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import java.security.MessageDigest;
 
 import java.math.BigDecimal;
 import java.util.Map;
@@ -52,9 +53,11 @@ public class PaymentController {
 
         String generatedSignature = hmacSha256(orderId + "|" + paymentId, secret);
 
-        if (!generatedSignature.equals(signature)) {
-            System.out.println("⚠️ Signature mismatch (bypassed for testing)");
-//            return ResponseEntity.badRequest().body("Invalid signature");
+        if (!MessageDigest.isEqual(
+                generatedSignature.getBytes(),
+                signature.getBytes()
+        )) {
+            return ResponseEntity.badRequest().body("Invalid signature");
         }
 
         Payment payment = paymentRepo.findById(orderId)

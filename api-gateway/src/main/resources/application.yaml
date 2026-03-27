@@ -36,7 +36,7 @@ spring:
             - id: user-service
               uri: lb://user-service
               predicates:
-                - Path=/api/users/**, /api/kyc/**, /api/admin/kyc/**
+                - Path=/api/users/**, /api/kyc/**, /api/admin/**
               filters:
                 - JwtAuthenticationFilter   # ✅ FIXED
                 - name: CircuitBreaker
@@ -79,16 +79,16 @@ spring:
                     methods: GET
 
             # ── ADMIN SERVICE ─────────────────────────────────────
-            - id: admin-service
-              uri: lb://admin-service
-              predicates:
-                - Path=/api/admin/**
-              filters:
-                - JwtAuthenticationFilter   # ✅ FIXED
-                - name: CircuitBreaker
-                  args:
-                    name: admin-cb
-                    fallbackUri: forward:/fallback/admin
+#            - id: admin-service
+#              uri: lb://admin-service
+#              predicates:
+#                - Path=/api/admin/**
+#              filters:
+#                - JwtAuthenticationFilter   # ✅ FIXED
+#                - name: CircuitBreaker
+#                  args:
+#                    name: admin-cb
+#                    fallbackUri: forward:/fallback/admin
 
             # ── FALLBACK ROUTE ────────────────────────────────────
             - id: fallback-route
@@ -151,15 +151,24 @@ resilience4j:
 
 # ── ACTUATOR ──────────────────────────────────────────────────
 management:
+  tracing:
+    enabled: ${MANAGEMENT_TRACING_ENABLED:true}
+    sampling:
+      probability: ${MANAGEMENT_TRACING_SAMPLING_PROBABILITY:1.0}
+    export:
+      zipkin:
+        endpoint: ${MANAGEMENT_TRACING_EXPORT_ZIPKIN_ENDPOINT:${ZIPKIN_ENDPOINT:http://localhost:9411/api/v2/spans}}
   endpoints:
     web:
       exposure:
-        include: health, info, gateway, circuitbreakers, metrics
+        include: health, info, gateway, circuitbreakers, metrics, prometheus
   endpoint:
     health:
       show-details: always
     gateway:
       enabled: true
+    prometheus:
+      access: unrestricted
 
 # ── LOGGING ───────────────────────────────────────────────────
 logging:

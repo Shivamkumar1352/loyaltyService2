@@ -129,7 +129,6 @@ public class AuthDto {
         private String email;
         private String phone;
         private User.Role role;
-        private User.KycStatus kycStatus;
 
         public static UserProfile from(User user) {
             return UserProfile.builder()
@@ -138,7 +137,6 @@ public class AuthDto {
                     .email(user.getEmail())
                     .phone(user.getPhone())
                     .role(user.getRole())
-                    .kycStatus(user.getKycStatus())
                     .build();
         }
     }

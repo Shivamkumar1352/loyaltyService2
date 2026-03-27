@@ -14,7 +14,7 @@ public class EmailService {
 
     public void sendOtp(String recipientEmail, String otp) {
         SimpleMailMessage message = new SimpleMailMessage();
-        message.setFrom("cse.mayank.singh.bora@gmail.com");
+        message.setFrom("shivamkumar1352002@gmail.com");
         message.setTo(recipientEmail);             
         message.setSubject("Your OTP Code");
         message.setText("Your OTP is: " + otp);

@@ -19,13 +19,22 @@ eureka:
     enable-self-preservation: false   # disable in dev; enable in prod
 
 management:
+  tracing:
+    enabled: ${MANAGEMENT_TRACING_ENABLED:true}
+    sampling:
+      probability: ${MANAGEMENT_TRACING_SAMPLING_PROBABILITY:1.0}
+    export:
+      zipkin:
+        endpoint: ${MANAGEMENT_TRACING_EXPORT_ZIPKIN_ENDPOINT:${ZIPKIN_ENDPOINT:http://localhost:9411/api/v2/spans}}
   endpoints:
     web:
       exposure:
-        include: health,info
+        include: health,info,prometheus
   endpoint:
     health:
       show-details: always
+    prometheus:
+      access: unrestricted
 
 logging:
   level:

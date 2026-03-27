@@ -18,10 +18,10 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         // Public / infrastructure paths
                         .requestMatchers(
-                                "/api/actuator/**",
-                                "/api/v3/api-docs/**",
-                                "/api/swagger-ui/**",
-                                "/api/swagger-ui.html"
+                                "/actuator/**",
+                                "/v3/api-docs/**",
+                                "/swagger-ui/**",
+                                "/swagger-ui.html"
                         ).permitAll()
                         // Internal service-to-service endpoint (auth-service → user-service)
                         .requestMatchers("/api/users/internal/**").permitAll()

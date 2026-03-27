@@ -24,13 +24,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
-/**
- * Wallet REST Controller.
- *
- * CRITICAL FIX: userId is extracted from the X-User-Id header set by the API Gateway
- * after JWT validation. The original code used @RequestParam Long userId which allowed
- * any caller to impersonate any user — a severe security vulnerability.
- */
+
 @Slf4j
 @RestController
 @RequestMapping("api/wallet")
@@ -49,15 +43,15 @@ public class WalletController {
         return ResponseEntity.ok(ApiResponse.ok("Balance fetched", walletService.getBalance(userId)));
     }
 
-    // ── Topup ─────────────────────────────────────────────────────────────────
-    @PostMapping("/internal/topup")
-    @Operation(summary = "Top up wallet")
-    public ResponseEntity<ApiResponse<Void>> topup(
-            @RequestHeader("X-User-Id") Long userId,
-            @Valid @RequestBody TopupRequest req) {
-        walletService.topup(userId, req.getAmount(), req.getIdempotencyKey());
-        return ResponseEntity.ok(ApiResponse.ok("Top-up successful"));
-    }
+//    // ── Topup ─────────────────────────────────────────────────────────────────
+//    @PostMapping("/internal/topup")
+//    @Operation(summary = "Top up wallet")
+//    public ResponseEntity<ApiResponse<Void>> topup(
+//            @RequestHeader("X-User-Id") Long userId,
+//            @Valid @RequestBody TopupRequest req) {
+//        walletService.topup(userId, req.getAmount(), req.getIdempotencyKey());
+//        return ResponseEntity.ok(ApiResponse.ok("Top-up successful"));
+//    }
 
     // ── Transfer ──────────────────────────────────────────────────────────────
     @PostMapping("/transfer")

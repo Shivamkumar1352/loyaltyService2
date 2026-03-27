@@ -50,7 +50,6 @@ public class AuthService {
                 .phone(request.getPhone())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(User.Role.USER)
-                .kycStatus(User.KycStatus.PENDING)
                 .build();
         User saved = userRepository.save(user);
         userServiceClient.createUser(new UserServiceClient.CreateUserRequest(

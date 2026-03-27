@@ -123,7 +123,7 @@ public class RewardService {
             throw new RewardException("Insufficient points. Available: " + acc.getPoints());
 
         // 1 point = ₹1 conversion
-        BigDecimal cashAmount = BigDecimal.valueOf(points);
+        BigDecimal cashAmount = BigDecimal.valueOf(points/100);
 
         acc.setPoints(acc.getPoints() - points);
         updateTier(acc);

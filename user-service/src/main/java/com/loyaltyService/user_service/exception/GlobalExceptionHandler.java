@@ -9,6 +9,12 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.util.stream.Collectors;
 @Slf4j @RestControllerAdvice
 public class GlobalExceptionHandler {
+    @ExceptionHandler(BadRequestException.class)
+    public ResponseEntity<ApiResponse<Void>> badRequest(BadRequestException ex) {
+        return ResponseEntity.badRequest()
+            .body(ApiResponse.<Void>builder().success(false).message(ex.getMessage()).build());
+    }
+
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<ApiResponse<Void>> notFound(ResourceNotFoundException ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)

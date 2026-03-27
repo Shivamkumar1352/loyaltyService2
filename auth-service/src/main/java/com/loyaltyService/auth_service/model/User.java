@@ -50,10 +50,10 @@ public class User {
     @Builder.Default
     private Role role = Role.USER;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "kyc_status", nullable = false)
-    @Builder.Default
-    private KycStatus kycStatus = KycStatus.PENDING;
+//    @Enumerated(EnumType.STRING)
+//    @Column(name = "kyc_status", nullable = false)
+//    @Builder.Default
+//    private KycStatus kycStatus = KycStatus.PENDING;
 
     @Column(name = "is_active", nullable = false)
     @Builder.Default
