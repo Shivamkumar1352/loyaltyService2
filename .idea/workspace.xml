@@ -5,79 +5,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="92f6b9d7-7fce-4d37-bf8d-4bccb3ec48c5" name="Changes" comment="notification">
-      <change afterPath="$PROJECT_DIR$/auth-service/src/main/java/com/loyaltyService/auth_service/config/RedisConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/user-service/src/main/java/com/loyaltyService/user_service/controller/AdminUserController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/user-service/src/main/java/com/loyaltyService/user_service/dto/AdminDashboardResponse.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/user-service/src/main/java/com/loyaltyService/user_service/dto/AdminUserResponse.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/user-service/src/main/java/com/loyaltyService/user_service/dto/UserSearchRequest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/user-service/src/main/java/com/loyaltyService/user_service/service/AdminUserService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/user-service/src/main/java/com/loyaltyService/user_service/service/impl/AdminUserServiceImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/admin-service/.gitattributes" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/admin-service/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/admin-service/.mvn/wrapper/maven-wrapper.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/admin-service/HELP.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/admin-service/mvnw" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/admin-service/mvnw.cmd" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/admin-service/pom.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/admin-service/src/main/java/com/loyaltyService/admin_service/AdminServiceApplication.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/admin-service/src/main/java/com/loyaltyService/admin_service/client/UserServiceClient.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/admin-service/src/main/java/com/loyaltyService/admin_service/client/UserServiceClientFallback.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/admin-service/src/main/java/com/loyaltyService/admin_service/config/SecurityConfig.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/admin-service/src/main/java/com/loyaltyService/admin_service/controller/AdminController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/admin-service/src/main/java/com/loyaltyService/admin_service/controller/KycController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/admin-service/src/main/java/com/loyaltyService/admin_service/dto/ApiResponse.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/admin-service/src/main/java/com/loyaltyService/admin_service/dto/CampaignRequest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/admin-service/src/main/java/com/loyaltyService/admin_service/dto/DashboardResponse.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/admin-service/src/main/java/com/loyaltyService/admin_service/dto/KycSummaryDto.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/admin-service/src/main/java/com/loyaltyService/admin_service/entity/AdminAudit.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/admin-service/src/main/java/com/loyaltyService/admin_service/entity/Campaign.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/admin-service/src/main/java/com/loyaltyService/admin_service/filter/AdminRoleFilter.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/admin-service/src/main/java/com/loyaltyService/admin_service/repository/AdminAuditRepository.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/admin-service/src/main/java/com/loyaltyService/admin_service/repository/CampaignRepository.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/admin-service/src/main/java/com/loyaltyService/admin_service/service/AdminDashboardService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/admin-service/src/main/java/com/loyaltyService/admin_service/service/CampaignService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/admin-service/src/main/java/com/loyaltyService/admin_service/service/impl/AdminDashboardServiceImpl.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/admin-service/src/main/java/com/loyaltyService/admin_service/service/impl/CampaignServiceImpl.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/admin-service/src/main/resources/application.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/admin-service/src/test/java/com/loyaltyService/admin_service/AdminServiceApplicationTests.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/api-gateway/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/api-gateway/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api-gateway/src/main/resources/application.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/api-gateway/src/main/resources/application.yaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/auth-service/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/auth-service/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/auth-service/src/main/java/com/loyaltyService/auth_service/dto/AuthDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/auth-service/src/main/java/com/loyaltyService/auth_service/dto/AuthDto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/auth-service/src/main/java/com/loyaltyService/auth_service/model/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/auth-service/src/main/java/com/loyaltyService/auth_service/model/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/auth-service/src/main/java/com/loyaltyService/auth_service/service/AuthService.java" beforeDir="false" afterPath="$PROJECT_DIR$/auth-service/src/main/java/com/loyaltyService/auth_service/service/AuthService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/auth-service/src/main/java/com/loyaltyService/auth_service/service/EmailService.java" beforeDir="false" afterPath="$PROJECT_DIR$/auth-service/src/main/java/com/loyaltyService/auth_service/service/EmailService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/auth-service/src/main/java/com/loyaltyService/auth_service/service/OtpService.java" beforeDir="false" afterPath="$PROJECT_DIR$/auth-service/src/main/java/com/loyaltyService/auth_service/service/OtpService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/auth-service/src/main/resources/application.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/auth-service/src/main/resources/application.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/auth-service/src/test/java/com/loyaltyService/auth_service/AuthServiceApplicationTests.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/eureka-server/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/eureka-server/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eureka-server/src/main/resources/application.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/eureka-server/src/main/resources/application.yaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/notification_service/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/notification_service/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/notification_service/src/main/resources/application.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/notification_service/src/main/resources/application.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/notification_service/src/main/java/com/loayaltyService/notification_service/config/KafkaConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/notification_service/src/main/java/com/loayaltyService/notification_service/config/KafkaConfig.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/reward-service/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/reward-service/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/reward-service/src/main/java/com/loyaltyService/reward_service/RewardServiceApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/reward-service/src/main/java/com/loyaltyService/reward_service/RewardServiceApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/reward-service/src/main/java/com/loyaltyService/reward_service/service/RewardService.java" beforeDir="false" afterPath="$PROJECT_DIR$/reward-service/src/main/java/com/loyaltyService/reward_service/service/RewardService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/reward-service/src/main/resources/application.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/reward-service/src/main/resources/application.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/reward-service/src/test/java/com/loyaltyService/reward_service/RewardServiceApplicationTests.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/user-service/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/user-service/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/user-service/src/main/java/com/loyaltyService/user_service/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/user-service/src/main/java/com/loyaltyService/user_service/config/SecurityConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/user-service/src/main/java/com/loyaltyService/user_service/entity/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/user-service/src/main/java/com/loyaltyService/user_service/entity/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/user-service/src/main/java/com/loyaltyService/user_service/exception/GlobalExceptionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/user-service/src/main/java/com/loyaltyService/user_service/exception/GlobalExceptionHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/user-service/src/main/java/com/loyaltyService/user_service/repository/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/user-service/src/main/java/com/loyaltyService/user_service/repository/UserRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/user-service/src/main/java/com/loyaltyService/user_service/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/user-service/src/main/java/com/loyaltyService/user_service/service/UserService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/user-service/src/main/resources/application.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/user-service/src/main/resources/application.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/user-service/src/test/java/com/loyaltyService/user_service/UserServiceApplicationTests.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/wallet-service/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/wallet-service/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wallet-service/src/main/java/com/loyaltyService/wallet_service/controller/PaymentController.java" beforeDir="false" afterPath="$PROJECT_DIR$/wallet-service/src/main/java/com/loyaltyService/wallet_service/controller/PaymentController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wallet-service/src/main/java/com/loyaltyService/wallet_service/controller/WalletController.java" beforeDir="false" afterPath="$PROJECT_DIR$/wallet-service/src/main/java/com/loyaltyService/wallet_service/controller/WalletController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wallet-service/src/main/java/com/loyaltyService/wallet_service/service/WalletService.java" beforeDir="false" afterPath="$PROJECT_DIR$/wallet-service/src/main/java/com/loyaltyService/wallet_service/service/WalletService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wallet-service/src/main/resources/application.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/wallet-service/src/main/resources/application.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wallet-service/src/test/java/com/loyaltyService/wallet_service/WalletServiceApplicationTests.java" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -85,7 +23,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="EmbeddingIndexingInfo">
-    <option name="cachedIndexableFilesCount" value="193" />
+    <option name="cachedIndexableFilesCount" value="209" />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -142,6 +80,10 @@
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
     &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
     &quot;RunOnceActivity.MCP Project settings loaded&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
@@ -202,14 +144,20 @@
         <entry key="SpringBootApplicationConfigurationType">
           <value>
             <map>
+              <entry key="apiGateway" value="STOPPED" />
+              <entry key="auth" value="STOPPED" />
+              <entry key="eureka" value="STOPPED" />
+              <entry key="notification" value="STOPPED" />
+              <entry key="reward" value="STOPPED" />
               <entry key="user" value="STOPPED" />
+              <entry key="wallet" value="STOPPED" />
             </map>
           </value>
         </entry>
       </map>
     </option>
   </component>
-  <component name="RunManager" selected="Spring Boot.user">
+  <component name="RunManager" selected="Spring Boot.reward">
     <configuration default="true" type="JetRunConfigurationType">
       <module name="loyaltyService" />
       <method v="2">
@@ -296,6 +244,9 @@
       <updated>1773928563907</updated>
       <workItem from="1774551895576" duration="25000" />
       <workItem from="1774583250429" duration="3192000" />
+      <workItem from="1774594312940" duration="1134000" />
+      <workItem from="1774595717223" duration="483000" />
+      <workItem from="1774599961077" duration="469000" />
     </task>
     <task id="LOCAL-00001" summary="notification">
       <option name="closed" value="true" />
