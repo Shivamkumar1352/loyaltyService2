@@ -46,7 +46,7 @@ public class GatewaySecurityConfig {
         CorsConfiguration config = new CorsConfiguration();
 
         // In production, replace "*" with your actual frontend domain(s)
-        config.setAllowedOriginPatterns(List.of("*"));
+        config.setAllowedOriginPatterns(List.of("http://localhost:5173/","*"));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
         config.setAllowedHeaders(List.of("*"));
         config.setExposedHeaders(List.of("Authorization", "X-User-Id", "X-User-Role"));

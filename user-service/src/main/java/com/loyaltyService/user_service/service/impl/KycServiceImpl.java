@@ -7,9 +7,11 @@ import com.loyaltyService.user_service.entity.KycDetail;
 import com.loyaltyService.user_service.entity.User;
 import com.loyaltyService.user_service.exception.DuplicateKycException;
 import com.loyaltyService.user_service.exception.ResourceNotFoundException;
+import com.loyaltyService.user_service.mapper.KycMapper;
 import com.loyaltyService.user_service.repository.AuditLogRepository;
 import com.loyaltyService.user_service.repository.KycRepository;
 import com.loyaltyService.user_service.repository.UserRepository;
+import com.loyaltyService.user_service.service.CloudinaryService;
 import com.loyaltyService.user_service.service.KafkaProducerService;
 import com.loyaltyService.user_service.service.KycService;
 import lombok.RequiredArgsConstructor;
@@ -37,53 +39,65 @@ public class KycServiceImpl implements KycService {
     private final AuditLogRepository  auditRepo;
     private final WalletServiceClient walletServiceClient;
     private final KafkaProducerService kafkaProducer;
+    private final KycMapper kycMapper;
+    private final CloudinaryService cloudinaryService;
 
 
     @Value("${kyc.upload-dir:uploads/kyc}")
-    private String uploadDir;
+        private String uploadDir;
 
-    // ── SUBMIT ───────────────────────────────────────────────────────────────
-    @Override
-    @Transactional
-    public KycStatusResponse submitKyc(Long userId, KycDetail.DocType docType,
-                                       String docNumber, MultipartFile docFile) {
-        User user = findUser(userId);
+        // ── SUBMIT ───────────────────────────────────────────────────────────────
+        @Override
+        @Transactional
+        public KycStatusResponse submitKyc(Long userId, KycDetail.DocType docType,
+                String docNumber, MultipartFile docFile) {
+            User user = findUser(userId);
 
-        if (kycRepo.existsByUserIdAndStatus(userId, KycDetail.KycStatus.APPROVED))
-            throw new DuplicateKycException("KYC already approved for this user");
+            if (kycRepo.existsByUserIdAndStatus(userId, KycDetail.KycStatus.APPROVED))
+                throw new DuplicateKycException("KYC already approved for this user");
 
-        String filePath = null;
-        if (docFile != null && !docFile.isEmpty()) {
-            try {
-                Path dir = Paths.get(uploadDir, userId.toString());
-                Files.createDirectories(dir);
-                String fname = docType.name() + "_" + System.currentTimeMillis()
-                        + "_" + docFile.getOriginalFilename();
-                filePath = dir.resolve(fname).toString();
-                Files.copy(docFile.getInputStream(), Paths.get(filePath),
-                        StandardCopyOption.REPLACE_EXISTING);
-            } catch (IOException e) {
-                throw new RuntimeException("Failed to store KYC document", e);
+//            String filePath = null;
+//            if (docFile != null && !docFile.isEmpty()) {
+//                try {
+//                    Path dir = Paths.get(uploadDir, userId.toString());
+//                    Files.createDirectories(dir);
+//                    String fname = docType.name() + "_" + System.currentTimeMillis()
+//                            + "_" + docFile.getOriginalFilename();
+//                    filePath = dir.resolve(fname).toString();
+//                    Files.copy(docFile.getInputStream(), Paths.get(filePath),
+//                            StandardCopyOption.REPLACE_EXISTING);
+//                } catch (IOException e) {
+//                    throw new RuntimeException("Failed to store KYC document", e);
+//                }
+//            }
+
+            String filePath = null;
+
+            if (docFile != null && !docFile.isEmpty()) {
+                filePath = cloudinaryService.uploadFile(
+                        docFile,
+                        userId,
+                        docType.name()
+                );
             }
-        }
 
-        KycDetail kyc = KycDetail.builder()
-                .user(user).docType(docType)
-                .docNumber(docNumber).docFilePath(filePath)
-                .status(KycDetail.KycStatus.PENDING)
-                .build();
+            KycDetail kyc = KycDetail.builder()
+                    .user(user).docType(docType)
+                    .docNumber(docNumber).docFilePath(filePath)
+                    .status(KycDetail.KycStatus.PENDING)
+                    .build();
 
-        KycDetail saved = kycRepo.save(kyc);
+            KycDetail saved = kycRepo.save(kyc);
 
-        auditRepo.save(AuditLog.builder()
-                .userId(userId).action("KYC_SUBMITTED")
-                .entityType("KycDetail").entityId(saved.getId().toString())
+            auditRepo.save(AuditLog.builder()
+                    .userId(userId).action("KYC_SUBMITTED")
+                    .entityType("KycDetail").entityId(saved.getId().toString())
                 .performedBy(user.getEmail())
                 .details("DocType: " + docType + ", DocNumber: " + docNumber)
                 .build());
 
         log.info("KYC submitted: userId={}, docType={}, kycId={}", userId, docType, saved.getId());
-        return toResponse(saved);
+        return kycMapper.toResponse(saved);
     }
 
     // ── STATUS ────────────────────────────────────────────────────────────────
@@ -91,14 +105,14 @@ public class KycServiceImpl implements KycService {
     public KycStatusResponse getStatus(Long userId) {
         KycDetail kyc = kycRepo.findFirstByUserIdOrderBySubmittedAtDesc(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("No KYC submission found"));
-        return toResponse(kyc);
+        return kycMapper.toResponse(kyc);
     }
 
     // ── PENDING LIST (admin) ──────────────────────────────────────────────────
     @Override
     public Page<KycStatusResponse> getPendingKyc(Pageable pageable) {
         return kycRepo.findByStatusOrderBySubmittedAtDesc(KycDetail.KycStatus.PENDING, pageable)
-                .map(this::toResponse);
+                .map(kycMapper::toResponse);
     }
 
     // ── APPROVE by KYC id (admin) ─────────────────────────────────────────────
@@ -201,7 +215,7 @@ public class KycServiceImpl implements KycService {
 
         // Create reward account with the SAME userId
         log.info("KYC approved: kycId={}, userId={}, by={}", kyc.getId(), userId, adminEmail);
-        return toResponse(saved);
+        return kycMapper.toResponse(saved);
     }
 
     private KycStatusResponse doReject(KycDetail kyc, String reason, String adminEmail) {
@@ -228,7 +242,7 @@ public class KycServiceImpl implements KycService {
         );
 
         kafkaProducer.send("kyc-events", event);
-        return toResponse(saved);
+        return kycMapper.toResponse(saved);
     }
 
     private KycDetail findKyc(Long id) {
@@ -241,19 +255,4 @@ public class KycServiceImpl implements KycService {
                 .orElseThrow(() -> new ResourceNotFoundException("User not found: " + userId));
     }
 
-    private KycStatusResponse toResponse(KycDetail k) {
-        User user = k.getUser();
-        return KycStatusResponse.builder()
-                .kycId(k.getId())
-                .userId(user != null ? user.getId() : null)
-                .userName(user != null ? user.getName() : null)
-                .userEmail(user != null ? user.getEmail() : null)
-                .docType(k.getDocType().name())
-                .docNumber(k.getDocNumber())
-                .status(k.getStatus().name())
-                .rejectionReason(k.getRejectionReason())
-                .submittedAt(k.getSubmittedAt())
-                .updatedAt(k.getUpdatedAt())
-                .build();
-    }
 }

@@ -1,8 +1,24 @@
-# Project exclude paths
-/admin-service/target/
-/api-gateway/target/
-/auth-service/target/
-/eureka-server/target/
-/reward-service/target/
-/user-service/target/
-/wallet-service/target/
+# Build folders (Maven/Java)
+
+**/target/
+
+# Environment variables (secrets)
+
+.env
+
+# IDE files
+
+.idea/
+*.iml
+
+# OS files
+
+.DS_Store
+
+# Logs
+
+*.log
+
+# Optional: temp/test files
+
+test.html

@@ -89,5 +89,13 @@ public class AuthController {
         return ResponseEntity.ok().build();
     }
 
+    @PutMapping("/internal/status")
+    public ResponseEntity<Void> updateStatus(@RequestBody StatusUpdateRequest req) {
+        authService.updateStatus(req.userId(), req.status());
+        return ResponseEntity.ok().build();
+    }
+
+    record StatusUpdateRequest(Long userId, String status) {}
+
     record UpdateProfileRequest(Long userId, String name, String phone) {}
 }

@@ -11,4 +11,9 @@ public class AuthServiceClientFallback implements AuthServiceClient {
     public void updateProfile(UpdateProfileRequest request) {
         log.error("auth-service unavailable — profile NOT synced for userId={}", request.userId());
     }
+    @Override
+    public void updateStatus(StatusUpdateRequest request) {
+        log.error("auth-service unavailable — status NOT synced for userId={}, status={}",
+                request.userId(), request.status());
+    }
 }
