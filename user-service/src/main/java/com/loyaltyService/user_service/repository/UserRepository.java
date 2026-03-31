@@ -1,5 +1,6 @@
 package com.loyaltyService.user_service.repository;
 
+import com.loyaltyService.user_service.entity.KycDetail;
 import com.loyaltyService.user_service.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -50,8 +51,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
         WHERE k2.user.id = u.id
     )
     AND k.status = :kycStatus
-""")
-    Page<User> findByLatestKycStatus(@Param("kycStatus") String kycStatus, Pageable pageable);
+    """)
+    Page<User> findByLatestKycStatus(@Param("kycStatus") KycDetail.KycStatus kycStatus, Pageable pageable);
 
     // Dashboard counts
     long countByStatus(User.UserStatus status);

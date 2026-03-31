@@ -24,6 +24,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+import static com.loyaltyService.user_service.entity.KycDetail.KycStatus.APPROVED;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
@@ -63,7 +64,7 @@ class AdminUserServiceImplTest {
         when(userRepo.countByRole(User.Role.ADMIN)).thenReturn(1L);
         when(userRepo.countByRole(User.Role.MERCHANT)).thenReturn(1L);
         when(kycRepo.countByStatus(KycDetail.KycStatus.PENDING)).thenReturn(2L);
-        when(kycRepo.countByStatus(KycDetail.KycStatus.APPROVED)).thenReturn(5L);
+        when(kycRepo.countByStatus(APPROVED)).thenReturn(5L);
         when(kycRepo.countByStatus(KycDetail.KycStatus.REJECTED)).thenReturn(1L);
         when(kycRepo.countByStatusSince(any(), any())).thenReturn(3L, 1L);
 
@@ -80,7 +81,7 @@ class AdminUserServiceImplTest {
     @Test
     void listUsersUsesCombinedFilterWhenStatusAndRolePresent() {
         User user = user(1L);
-        KycDetail kyc = latestKyc(user, KycDetail.KycStatus.APPROVED);
+        KycDetail kyc = latestKyc(user, APPROVED);
         when(userRepo.findByStatusAndRole(User.UserStatus.ACTIVE, User.Role.USER, PageRequest.of(0, 10)))
                 .thenReturn(new PageImpl<>(List.of(user), PageRequest.of(0, 10), 1));
         when(kycRepo.findFirstByUserIdOrderBySubmittedAtDesc(1L)).thenReturn(Optional.of(kyc));
@@ -216,14 +217,14 @@ class AdminUserServiceImplTest {
     @Test
     void findByKycStatusUppercasesStatusBeforeDelegating() {
         User user = user(17L);
-        when(userRepo.findByLatestKycStatus(eq("APPROVED"), eq(PageRequest.of(0, 10))))
+        when(userRepo.findByLatestKycStatus(eq(APPROVED), eq(PageRequest.of(0, 10))))
                 .thenReturn(new PageImpl<>(List.of(user), PageRequest.of(0, 10), 1));
         when(kycRepo.findFirstByUserIdOrderBySubmittedAtDesc(17L)).thenReturn(Optional.empty());
 
         var page = adminUserService.findByKycStatus("approved", PageRequest.of(0, 10));
 
         assertEquals(1, page.getTotalElements());
-        verify(userRepo).findByLatestKycStatus("APPROVED", PageRequest.of(0, 10));
+        verify(userRepo).findByLatestKycStatus(APPROVED, PageRequest.of(0, 10));
     }
 
     @Test

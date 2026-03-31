@@ -1,5 +1,6 @@
 package com.loyaltyService.wallet_service.controller;
 
+import com.loyaltyService.wallet_service.dto.PaymentVerifyRequest;
 import com.loyaltyService.wallet_service.entity.Payment;
 import com.loyaltyService.wallet_service.repository.PaymentRepository;
 import com.loyaltyService.wallet_service.service.WalletCommandService;
@@ -22,9 +23,7 @@ public class PaymentController {
 
         private final PaymentRepository paymentRepo;
         private final RazorpayService razorpayService;
-        private final WalletCommandService walletCommandService;
-        private final WalletQueryService walletQueryService;
-        private final com.loyaltyService.wallet_service.service.KafkaProducerService kafkaProducer;
+
 
         @Value("${razorpay.secret}")
         private String secret;
@@ -43,47 +42,14 @@ public class PaymentController {
 
         @PostMapping("/verify")
         public ResponseEntity<?> verify(
-                        @RequestHeader("X-User-Id") Long userId,
-                        @RequestBody Map<String, String> payload) throws Exception {
+                @RequestHeader("X-User-Id") Long userId,
+                @RequestBody PaymentVerifyRequest request) {
 
-                String orderId = payload.get("razorpayOrderId");
-                String paymentId = payload.get("razorpayPaymentId");
-                String signature = payload.get("razorpaySignature");
-
-                String generatedSignature = hmacSha256(orderId + "|" + paymentId, secret);
-
-                if (!MessageDigest.isEqual(
-                                generatedSignature.getBytes(),
-                                signature.getBytes())) {
-                        return ResponseEntity.badRequest().body("Invalid signature");
+                try {
+                        razorpayService.verifyPayment(userId, request);
+                        return ResponseEntity.ok("Payment verified & wallet credited");
+                } catch (Exception e) {
+                        return ResponseEntity.badRequest().body(e.getMessage());
                 }
-
-                Payment payment = paymentRepo.findById(orderId)
-                                .orElseThrow(() -> new RuntimeException("Order not found"));
-
-                BigDecimal amount = payment.getAmount(); // ✅ real amount
-
-                walletCommandService.topup(userId, amount, orderId);
-                payment.setStatus("SUCCESS");
-                paymentRepo.save(payment);
-                BigDecimal updatedBalance = walletQueryService.getBalance(userId).getBalance();
-
-                kafkaProducer.send("payment-events", Map.of(
-                                "event", "PAYMENT_SUCCESS",
-                                "userId", userId,
-                                "amount", amount,
-                                "orderId", orderId,
-                                "balance", updatedBalance // 👈 fetch from wallet
-                ));
-
-                return ResponseEntity.ok("Payment verified & wallet credited");
-        }
-
-        // ✅ ADD THIS METHOD
-        public String hmacSha256(String data, String secret) throws Exception {
-                javax.crypto.Mac mac = javax.crypto.Mac.getInstance("HmacSHA256");
-                mac.init(new javax.crypto.spec.SecretKeySpec(secret.getBytes(), "HmacSHA256"));
-                byte[] rawHmac = mac.doFinal(data.getBytes());
-                return org.apache.commons.codec.binary.Hex.encodeHexString(rawHmac);
         }
 }

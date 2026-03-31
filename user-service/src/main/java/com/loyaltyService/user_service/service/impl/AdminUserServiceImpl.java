@@ -20,8 +20,10 @@ import java.time.DayOfWeek;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneOffset;
+import java.util.Arrays;
 import java.util.Locale;
 import java.time.temporal.TemporalAdjusters;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -131,7 +133,21 @@ public class AdminUserServiceImpl implements AdminUserService {
 
     @Override
     public Page<AdminUserResponse> findByKycStatus(String kycStatus, Pageable pageable) {
-        return userRepo.findByLatestKycStatus(kycStatus.toUpperCase(Locale.ROOT), pageable).map(adminUserMapper::toDto);
+        // Convert string to enum
+        KycDetail.KycStatus status;
+        try {
+            status = KycDetail.KycStatus.valueOf(kycStatus.toUpperCase(Locale.ROOT));
+        } catch (IllegalArgumentException e) {
+            String validValues = Arrays.stream(KycDetail.KycStatus.values())
+                    .map(Enum::name)
+                    .collect(Collectors.joining(", "));
+            throw new IllegalArgumentException("Invalid KYC status: " + kycStatus +
+                    ". Valid values: " + validValues);
+        }
+
+        // Now pass the enum to the repository
+        return userRepo.findByLatestKycStatus(status, pageable)
+                .map(adminUserMapper::toDto);
     }
 
     @Override

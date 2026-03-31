@@ -11,17 +11,13 @@ import com.loyaltyService.reward_service.service.KafkaProducerService;
 @RequiredArgsConstructor
 public class KafkaProducerServiceImpl implements KafkaProducerService {
 
-    private final KafkaTemplate<String, String> kafkaTemplate; // String
+    private final KafkaTemplate<String, Object> kafkaTemplate; // String
 
     private final ObjectMapper objectMapper = new ObjectMapper(); // 👈 add this
 
     public void send(String topic, Object payload) {
         try {
-            // ✅ CONVERT OBJECT → STRING HERE
-            String json = objectMapper.writeValueAsString(payload);
-
-            // ✅ SEND STRING
-            kafkaTemplate.send(topic, json);
+            kafkaTemplate.send(topic, payload);
 
         } catch (Exception e) {
             throw new RuntimeException("Error serializing Kafka message", e);

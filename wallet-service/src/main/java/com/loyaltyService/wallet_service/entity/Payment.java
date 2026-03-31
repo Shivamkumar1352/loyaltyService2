@@ -16,9 +16,11 @@ import java.math.BigDecimal;
 public class Payment {
 
     @Id
-    private String orderId;
+    private String orderId; // keep as is
+
+    private String paymentId; // ✅ ADD THIS
 
     private Long userId;
     private BigDecimal amount;
-    private String status; // CREATED, SUCCESS
+    private String status; // CREATED, SUCCESS, FAILED
 }

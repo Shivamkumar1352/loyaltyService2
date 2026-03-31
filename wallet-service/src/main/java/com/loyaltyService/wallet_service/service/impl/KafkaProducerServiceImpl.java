@@ -11,18 +11,16 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class KafkaProducerServiceImpl implements KafkaProducerService{
 
-    private final KafkaTemplate<String, String> kafkaTemplate;
+    private final KafkaTemplate<String, Object> kafkaTemplate;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
     public void send(String topic, Object message) {
         try {
-            String json = objectMapper.writeValueAsString(message);
-
-            kafkaTemplate.send(topic, json)
+            kafkaTemplate.send(topic, message)
                     .whenComplete((result, ex) -> {
                         if (ex == null) {
-                            System.out.println("✅ Message sent: " + json);
+                            System.out.println("✅ Message sent: " + message);
                         } else {
                             System.out.println("❌ Failed: " + ex.getMessage());
                         }

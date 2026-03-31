@@ -92,12 +92,12 @@ public class RewardCommandServiceImpl implements RewardCommandService {
 
         // Publish Saga event for downstream listeners
         kafkaProducer.send("reward-events",
-                mapper.writeValueAsString(Map.of(
+                Map.of(
                         "event", "POINTS_EARNED",
                         "userId", userId,
                         "amount", earned,
                         "balance", acc.getPoints()
-                )));
+                ));
     }
 
     // ── ADD CATALOG ITEM ──────────────────────────────────────────────────────
