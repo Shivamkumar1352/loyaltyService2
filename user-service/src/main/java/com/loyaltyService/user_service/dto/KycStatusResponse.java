@@ -9,6 +9,7 @@ public class KycStatusResponse {
     private String userEmail;   // user's email for display in admin panel
     private String docType;
     private String docNumber;
+    private String docFilePath;
     private String status;
     private String rejectionReason;
     private Instant submittedAt;

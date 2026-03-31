@@ -34,17 +34,15 @@ public class UserCommandServiceImpl implements UserCommandService {
 
     @Override
     @Transactional
+    @CacheEvict(value = "user-profile", key = "#id")
     public void createUser(Long id, String name, String email, String phone, User.Role role) {
         if (userRepo.existsById(id)) {
             log.info("User already exists: id={}", id);
             return;
         }
         User user = User.builder()
-                .id(id)
-                .name(name)
-                .email(email)
-                .phone(phone)
-                .role(role)
+                .id(id).name(name).email(email)
+                .phone(phone).role(role)
                 .status(User.UserStatus.ACTIVE)
                 .build();
         userRepo.save(user);

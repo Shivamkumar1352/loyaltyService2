@@ -14,8 +14,8 @@ import com.loyaltyService.user_service.entity.User;
 @Mapper(componentModel = "spring")
 public interface UserMapper {
 	@Mapping(target = "status", expression = "java(user.getStatus().name())")
-    @Mapping(target = "kycStatus", expression = "java(kycStatus)")
-	UserProfileResponse toUserProfile(User user,String kycStatus);
+	@Mapping(target = "kycStatus", expression = "java(kycStatus != null ? kycStatus : \"NOT_SUBMITTED\")")
+	UserProfileResponse toUserProfile(User user, String kycStatus);
 	AdminUserResponse toAdminResponse(User user);
 	
 	@BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)

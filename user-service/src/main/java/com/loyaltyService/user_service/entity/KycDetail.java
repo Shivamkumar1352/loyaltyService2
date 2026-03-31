@@ -40,8 +40,8 @@ public class KycDetail {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false, length = 20)
-    @Builder.Default
-    private KycStatus status = KycStatus.PENDING;
+//    @Builder.Default
+    private KycStatus status = KycStatus.NOT_SUBMITTED;
 
     @Column(name = "rejection_reason", length = 500)
     private String rejectionReason;
@@ -58,5 +58,5 @@ public class KycDetail {
     private Instant updatedAt;
 
     public enum DocType   { AADHAAR, PAN, PASSPORT, DRIVING_LICENSE }
-    public enum KycStatus { PENDING, APPROVED, REJECTED }
+    public enum KycStatus { NOT_SUBMITTED, PENDING, APPROVED, REJECTED }
 }

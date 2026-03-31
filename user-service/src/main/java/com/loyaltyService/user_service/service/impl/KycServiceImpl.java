@@ -103,9 +103,12 @@ public class KycServiceImpl implements KycService {
     // ── STATUS ────────────────────────────────────────────────────────────────
     @Override
     public KycStatusResponse getStatus(Long userId) {
-        KycDetail kyc = kycRepo.findFirstByUserIdOrderBySubmittedAtDesc(userId)
-                .orElseThrow(() -> new ResourceNotFoundException("No KYC submission found"));
-        return kycMapper.toResponse(kyc);
+        return kycRepo.findFirstByUserIdOrderBySubmittedAtDesc(userId)
+                .map(kycMapper::toResponse)
+                .orElse(KycStatusResponse.builder()
+                        .userId(userId)
+                        .status("NOT_SUBMITTED")
+                        .build());
     }
 
     // ── PENDING LIST (admin) ──────────────────────────────────────────────────
@@ -205,7 +208,6 @@ public class KycServiceImpl implements KycService {
 
         kafkaProducer.send("kyc-events", event);
 
-        // Create wallet with the SAME userId from auth-service
         try {
             walletServiceClient.createWallet(userId);
             log.info("Wallet created for userId={} after KYC approval", userId);
@@ -213,7 +215,6 @@ public class KycServiceImpl implements KycService {
             log.error("Failed to create wallet for userId={}", userId, e);
         }
 
-        // Create reward account with the SAME userId
         log.info("KYC approved: kycId={}, userId={}, by={}", kyc.getId(), userId, adminEmail);
         return kycMapper.toResponse(saved);
     }

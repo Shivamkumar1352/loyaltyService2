@@ -15,5 +15,6 @@ public interface KycMapper {
     @Mapping(target = "userEmail", expression = "java(entity.getUser() != null ? entity.getUser().getEmail() : null)")
     @Mapping(target = "docType", expression = "java(entity.getDocType().name())")
     @Mapping(target = "status", expression = "java(entity.getStatus().name())")
+    @Mapping(target = "docFilePath", expression = "java(entity.getDocFilePath())")
     KycStatusResponse toResponse(KycDetail entity);
 }
