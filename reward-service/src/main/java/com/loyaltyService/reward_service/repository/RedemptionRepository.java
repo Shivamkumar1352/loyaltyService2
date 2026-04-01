@@ -7,4 +7,5 @@ import java.util.List;
 @Repository
 public interface RedemptionRepository extends JpaRepository<Redemption, Long> {
     List<Redemption> findByUserIdOrderByRedeemedAtDesc(Long userId);
+    boolean existsByUserIdAndRewardId(Long userId, Long rewardId);
 }

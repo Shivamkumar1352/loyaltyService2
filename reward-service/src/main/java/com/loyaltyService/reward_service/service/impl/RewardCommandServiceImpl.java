@@ -46,7 +46,7 @@ public class RewardCommandServiceImpl implements RewardCommandService {
     private int pointsPerRupee;
     @Value("${rewards.min-redeem-points:100}")
     private int minRedeemPoints;
-    @Value("${rewards.max-daily-redeem-points:5000}")
+    @Value("${rewards.max-daily-redeem-points:500}")
     private int maxDailyRedeemPoints;
     @Value("${rewards.tiers.gold-threshold:1000}")
     private int goldThreshold;
@@ -133,7 +133,7 @@ public class RewardCommandServiceImpl implements RewardCommandService {
         if (acc.getPoints() < points)
             throw new RewardException("Insufficient points. Available: " + acc.getPoints());
 
-        BigDecimal cashAmount = BigDecimal.valueOf(points / 100);
+        BigDecimal cashAmount = BigDecimal.valueOf(points);
         acc.setPoints(acc.getPoints() - points);
         updateTier(acc);
         rewardRepo.save(acc);
@@ -180,11 +180,14 @@ public class RewardCommandServiceImpl implements RewardCommandService {
     @Transactional
     @CacheEvict(value = "reward-summary", key = "#userId")
     public Redemption redeemReward(Long userId, Long rewardId) {
+
         RewardAccount acc = findAccount(userId);
         initializeDefaults(acc);
         RewardItem item = itemRepo.findById(rewardId)
                 .orElseThrow(() -> new RewardException("Reward item not found", HttpStatus.NOT_FOUND));
-
+        if (redemptionRepo.existsByUserIdAndRewardId(userId, rewardId)) {
+            throw new RewardException("You have already redeemed this reward");
+        }
         if (!Boolean.TRUE.equals(item.getActive()))
             throw new RewardException("This reward is no longer available");
         if (item.getStock() <= 0)
@@ -216,6 +219,7 @@ public class RewardCommandServiceImpl implements RewardCommandService {
         if (item.getType() == RewardItem.ItemType.CASHBACK && item.getCashbackAmount() != null) {
             try {
                 walletClient.credit(userId, item.getCashbackAmount());
+                r.setCashbackAmount(item.getCashbackAmount());
             } catch (Exception e) {
                 // Compensate: restore points
                 acc.setPoints(acc.getPoints() + item.getPointsRequired());

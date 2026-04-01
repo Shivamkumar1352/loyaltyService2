@@ -1,5 +1,6 @@
 package com.loyaltyService.reward_service.service.impl;
 
+import com.loyaltyService.reward_service.dto.PageResponse;
 import com.loyaltyService.reward_service.dto.RewardSummaryDto;
 import com.loyaltyService.reward_service.entity.RewardAccount;
 import com.loyaltyService.reward_service.entity.RewardItem;
@@ -14,6 +15,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.List;
@@ -101,11 +106,33 @@ class RewardQueryServiceImplTest {
 
     @Test
     void testGetTransactions() {
-        RewardTransaction txn = RewardTransaction.builder().id(1L).userId(1L).points(10).build();
-        when(txnRepo.findByUserIdOrderByCreatedAtDesc(1L)).thenReturn(List.of(txn));
 
-        List<RewardTransaction> txns = queryService.getTransactions(1L);
+        RewardTransaction txn = RewardTransaction.builder()
+                .id(1L)
+                .userId(1L)
+                .points(10)
+                .build();
 
-        assertFalse(txns.isEmpty());
+        Page<RewardTransaction> page = new PageImpl<>(List.of(txn));
+
+        when(txnRepo.findByUserIdOrderByCreatedAtDesc(eq(1L), any(Pageable.class)))
+                .thenReturn(page);
+
+        Pageable pageable = PageRequest.of(0, 5);
+
+        PageResponse<RewardTransaction> result =
+                queryService.getTransactions(1L, pageable);
+
+        assertNotNull(result);
+        assertFalse(result.getContent().isEmpty());
+        assertEquals(1, result.getContent().size());
+
+        // Optional strong assertions 🔥
+        assertEquals(0, result.getPage());
+        assertEquals(5, result.getSize());
+        assertEquals(1, result.getTotalElements());
+
+        verify(txnRepo, times(1))
+                .findByUserIdOrderByCreatedAtDesc(eq(1L), any(Pageable.class));
     }
 }

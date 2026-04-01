@@ -1,8 +1,11 @@
 package com.loyaltyService.reward_service.service;
 
+import com.loyaltyService.reward_service.dto.PageResponse;
 import com.loyaltyService.reward_service.dto.RewardSummaryDto;
 import com.loyaltyService.reward_service.entity.RewardItem;
 import com.loyaltyService.reward_service.entity.RewardTransaction;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -16,5 +19,5 @@ public interface RewardQueryService {
 
     List<RewardItem> getCatalog();
 
-    List<RewardTransaction> getTransactions(Long userId);
+    PageResponse<RewardTransaction> getTransactions(Long userId, Pageable pageable);
 }

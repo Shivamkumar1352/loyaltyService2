@@ -1,6 +1,7 @@
 package com.loyaltyService.reward_service.service;
 
 import com.loyaltyService.reward_service.client.WalletClient;
+import com.loyaltyService.reward_service.dto.PageResponse;
 import com.loyaltyService.reward_service.dto.RewardItemRequest;
 import com.loyaltyService.reward_service.dto.RewardSummaryDto;
 import com.loyaltyService.reward_service.entity.Redemption;
@@ -21,6 +22,10 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -319,9 +324,26 @@ class RewardServiceTest {
 
     @Test
     void getTransactionsDelegatesToRepository() {
-        when(txnRepo.findByUserIdOrderByCreatedAtDesc(1L)).thenReturn(List.of(RewardTransaction.builder().id(1L).build()));
 
-        assertEquals(1, rewardQueryService.getTransactions(1L).size());
+        RewardTransaction txn = RewardTransaction.builder()
+                .id(1L)
+                .userId(1L)
+                .build();
+
+        Page<RewardTransaction> mockPage = new PageImpl<>(List.of(txn));
+
+        when(txnRepo.findByUserIdOrderByCreatedAtDesc(eq(1L), any(Pageable.class)))
+                .thenReturn(mockPage);
+
+        Pageable pageable = PageRequest.of(0, 5);
+
+        PageResponse<RewardTransaction> result =
+                rewardQueryService.getTransactions(1L, pageable);
+
+        assertEquals(1, result.getContent().size());
+
+        verify(txnRepo)
+                .findByUserIdOrderByCreatedAtDesc(eq(1L), any(Pageable.class));
     }
 
     @Test

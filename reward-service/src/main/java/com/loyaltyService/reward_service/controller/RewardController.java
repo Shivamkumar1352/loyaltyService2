@@ -1,9 +1,6 @@
 package com.loyaltyService.reward_service.controller;
 
-import com.loyaltyService.reward_service.dto.ApiResponse;
-import com.loyaltyService.reward_service.dto.RedeemRequest;
-import com.loyaltyService.reward_service.dto.RewardItemRequest;
-import com.loyaltyService.reward_service.dto.RewardSummaryDto;
+import com.loyaltyService.reward_service.dto.*;
 import com.loyaltyService.reward_service.entity.Redemption;
 import com.loyaltyService.reward_service.entity.RewardItem;
 import com.loyaltyService.reward_service.entity.RewardTransaction;
@@ -15,6 +12,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -87,10 +87,16 @@ public class RewardController {
 
     // ── Transaction history ───────────────────────────────────────────────────
     @GetMapping("/transactions")
-    @Operation(summary = "Get reward transaction history")
-    public ResponseEntity<ApiResponse<List<RewardTransaction>>> transactions(
-            @RequestHeader("X-User-Id") Long userId) {
-        return ResponseEntity.ok(ApiResponse.ok("Transactions fetched", rewardQueryService.getTransactions(userId)));
+    public ResponseEntity<PageResponse<RewardTransaction>> getTransactions(
+            @RequestHeader("X-User-Id") Long userId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+
+        Pageable pageable = PageRequest.of(page, size);
+
+        return ResponseEntity.ok(
+                rewardQueryService.getTransactions(userId, pageable)
+        );
     }
 
     // ── Admin — add catalog item ──────────────────────────────────────────────

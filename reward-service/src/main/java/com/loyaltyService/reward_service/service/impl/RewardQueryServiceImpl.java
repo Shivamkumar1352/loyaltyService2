@@ -1,5 +1,6 @@
 package com.loyaltyService.reward_service.service.impl;
 
+import com.loyaltyService.reward_service.dto.PageResponse;
 import com.loyaltyService.reward_service.dto.RewardSummaryDto;
 import com.loyaltyService.reward_service.entity.RewardAccount;
 import com.loyaltyService.reward_service.entity.RewardItem;
@@ -14,6 +15,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -72,8 +77,17 @@ public class RewardQueryServiceImpl implements RewardQueryService {
     }
 
     @Override
-    public List<RewardTransaction> getTransactions(Long userId) {
-        return txnRepo.findByUserIdOrderByCreatedAtDesc(userId);
+    public PageResponse<RewardTransaction> getTransactions(Long userId, Pageable pageable) {
+        Page<RewardTransaction> page =
+                txnRepo.findByUserIdOrderByCreatedAtDesc(userId, pageable);
+
+        return new PageResponse<>(
+                page.getContent(),
+                page.getNumber(),
+                page.getSize(),
+                page.getTotalElements(),
+                page.getTotalPages()
+        );
     }
 
     // ── Helpers ───────────────────────────────────────────────────────────────
