@@ -16,7 +16,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
@@ -74,6 +73,11 @@ public class RewardQueryServiceImpl implements RewardQueryService {
     public List<RewardItem> getCatalog() {
         log.debug("Cache miss — loading reward catalog from DB");
         return itemRepo.findByActiveTrueOrderByPointsRequiredAsc();
+    }
+
+    @Override
+    public List<RewardItem> getCatalogForAdmin() {
+        return itemRepo.findAll(Sort.by(Sort.Direction.ASC, "pointsRequired"));
     }
 
     @Override

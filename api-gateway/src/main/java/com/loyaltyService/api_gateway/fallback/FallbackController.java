@@ -3,7 +3,6 @@ package com.loyaltyService.api_gateway.fallback;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
@@ -22,31 +21,31 @@ import java.util.Map;
 @RequestMapping("/fallback")
 public class FallbackController {
 
-    @GetMapping("/auth")
+    @RequestMapping("/auth")
     public Mono<ResponseEntity<Map<String, Object>>> authFallback() {
         log.warn("Auth service circuit breaker triggered");
         return Mono.just(serviceUnavailable("auth-service"));
     }
 
-    @GetMapping("/user")
+    @RequestMapping("/user")
     public Mono<ResponseEntity<Map<String, Object>>> userFallback() {
         log.warn("User service circuit breaker triggered");
         return Mono.just(serviceUnavailable("user-service"));
     }
 
-    @GetMapping("/wallet")
+    @RequestMapping("/wallet")
     public Mono<ResponseEntity<Map<String, Object>>> walletFallback() {
         log.warn("Wallet service circuit breaker triggered");
         return Mono.just(serviceUnavailable("wallet-service"));
     }
 
-    @GetMapping("/rewards")
+    @RequestMapping("/rewards")
     public Mono<ResponseEntity<Map<String, Object>>> rewardsFallback() {
         log.warn("Rewards service circuit breaker triggered");
         return Mono.just(serviceUnavailable("rewards-service"));
     }
 
-    @GetMapping("/admin")
+    @RequestMapping("/admin")
     public Mono<ResponseEntity<Map<String, Object>>> adminFallback() {
         log.warn("Admin service circuit breaker triggered");
         return Mono.just(serviceUnavailable("admin-service"));

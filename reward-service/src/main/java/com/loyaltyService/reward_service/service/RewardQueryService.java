@@ -19,5 +19,7 @@ public interface RewardQueryService {
 
     List<RewardItem> getCatalog();
 
+    List<RewardItem> getCatalogForAdmin();
+
     PageResponse<RewardTransaction> getTransactions(Long userId, Pageable pageable);
 }

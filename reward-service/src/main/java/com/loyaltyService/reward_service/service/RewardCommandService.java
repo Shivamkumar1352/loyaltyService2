@@ -21,5 +21,9 @@ public interface RewardCommandService {
 
     RewardItem addCatalogItem(RewardItemRequest req);
 
+    RewardItem updateCatalogItem(Long rewardId, RewardItemRequest req);
+
+    void deleteCatalogItem(Long rewardId);
+
     void createAccountIfNotExists(Long userId);
 }

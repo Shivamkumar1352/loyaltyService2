@@ -146,6 +146,8 @@ resilience4j:
       default:
         timeoutDuration: 5s
     instances:
+      auth-cb:
+        timeoutDuration: 15s
       wallet-cb:
         timeoutDuration: 10s
 

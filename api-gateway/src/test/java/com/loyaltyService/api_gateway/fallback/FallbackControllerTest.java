@@ -5,6 +5,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.web.reactive.server.WebTestClient;
 
 import java.util.Map;
 import java.util.function.Supplier;
@@ -17,6 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 class FallbackControllerTest {
 
     private final FallbackController controller = new FallbackController();
+    private final WebTestClient webTestClient = WebTestClient.bindToController(controller).build();
 
     @ParameterizedTest
     @MethodSource("fallbackEndpoints")
@@ -34,6 +36,20 @@ class FallbackControllerTest {
         assertEquals(serviceName + " is temporarily unavailable. Please try again shortly.",
                 response.getBody().get("message"));
         assertFalse(((String) response.getBody().get("timestamp")).isBlank());
+    }
+
+    @org.junit.jupiter.api.Test
+    void authFallbackAcceptsPostRequests() {
+        webTestClient
+                .post()
+                .uri("/fallback/auth")
+                .exchange()
+                .expectStatus().isEqualTo(HttpStatus.SERVICE_UNAVAILABLE)
+                .expectBody()
+                .jsonPath("$.success").isEqualTo(false)
+                .jsonPath("$.status").isEqualTo(503)
+                .jsonPath("$.error").isEqualTo("Service Unavailable")
+                .jsonPath("$.message").isEqualTo("auth-service is temporarily unavailable. Please try again shortly.");
     }
 
     private static Stream<Arguments> fallbackEndpoints() {

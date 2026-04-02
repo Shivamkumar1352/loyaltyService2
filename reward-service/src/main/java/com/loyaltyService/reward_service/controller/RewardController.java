@@ -105,14 +105,57 @@ public class RewardController {
     public ResponseEntity<ApiResponse<RewardItem>> addCatalogItem(
             @RequestHeader("X-User-Role") String role,
             @RequestBody RewardItemRequest req) {
-        if (!"ADMIN".equals(role))
+        if (!isAdmin(role)) {
+            return forbiddenResponse();
+        }
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ApiResponse.ok("Reward item added", rewardCommandService.addCatalogItem(req)));
+    }
+
+    // ── Admin — read/update/delete catalog ───────────────────────────────────
+    @GetMapping("/admin/catalog")
+    @Operation(summary = "Admin — read complete reward catalog")
+    public ResponseEntity<ApiResponse<List<RewardItem>>> adminCatalog(
+            @RequestHeader("X-User-Role") String role) {
+        if (!isAdmin(role)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                    .body(ApiResponse.<RewardItem>builder()
+                    .body(ApiResponse.<List<RewardItem>>builder()
                             .success(false)
                             .message("Access denied — ADMIN role required")
                             .build());
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(ApiResponse.ok("Reward item added", rewardCommandService.addCatalogItem(req)));
+        }
+
+        return ResponseEntity.ok(
+                ApiResponse.ok("Admin catalog fetched", rewardQueryService.getCatalogForAdmin()));
+    }
+
+    @PutMapping("/admin/catalog/{rewardId}")
+    @Operation(summary = "Admin — update reward catalog item")
+    public ResponseEntity<ApiResponse<RewardItem>> updateCatalogItem(
+            @RequestHeader("X-User-Role") String role,
+            @PathVariable Long rewardId,
+            @RequestBody RewardItemRequest req) {
+        if (!isAdmin(role)) {
+            return forbiddenResponse();
+        }
+        return ResponseEntity.ok(
+                ApiResponse.ok("Reward item updated", rewardCommandService.updateCatalogItem(rewardId, req)));
+    }
+
+    @DeleteMapping("/admin/catalog/{rewardId}")
+    @Operation(summary = "Admin — delete reward catalog item")
+    public ResponseEntity<ApiResponse<Void>> deleteCatalogItem(
+            @RequestHeader("X-User-Role") String role,
+            @PathVariable Long rewardId) {
+        if (!isAdmin(role)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(ApiResponse.<Void>builder()
+                            .success(false)
+                            .message("Access denied — ADMIN role required")
+                            .build());
+        }
+        rewardCommandService.deleteCatalogItem(rewardId);
+        return ResponseEntity.ok(ApiResponse.ok("Reward item deleted"));
     }
 
     // ── Internal endpoints (service-to-service) ───────────────────────────────
@@ -130,5 +173,17 @@ public class RewardController {
             @RequestParam java.math.BigDecimal amount) {
         rewardCommandService.earnPoints(userId, amount);
         return ResponseEntity.ok().build();
+    }
+
+    private boolean isAdmin(String role) {
+        return "ADMIN".equalsIgnoreCase(role);
+    }
+
+    private ResponseEntity<ApiResponse<RewardItem>> forbiddenResponse() {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                .body(ApiResponse.<RewardItem>builder()
+                        .success(false)
+                        .message("Access denied — ADMIN role required")
+                        .build());
     }
 }

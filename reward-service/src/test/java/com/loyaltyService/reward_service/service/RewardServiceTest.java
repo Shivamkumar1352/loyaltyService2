@@ -147,6 +147,48 @@ class RewardServiceTest {
     }
 
     @Test
+    void updateCatalogItemUpdatesExistingItem() {
+        RewardItem existing = RewardItem.builder()
+                .id(5L)
+                .name("Old")
+                .description("Old desc")
+                .pointsRequired(300)
+                .type(RewardItem.ItemType.COUPON)
+                .stock(5)
+                .tierRequired("SILVER")
+                .active(true)
+                .build();
+        RewardItemRequest request = new RewardItemRequest(
+                "New",
+                "New desc",
+                450,
+                "VOUCHER",
+                9,
+                "GOLD",
+                BigDecimal.ZERO
+        );
+        when(itemRepo.findById(5L)).thenReturn(Optional.of(existing));
+        when(itemRepo.save(any(RewardItem.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        RewardItem updated = rewardCommandService.updateCatalogItem(5L, request);
+
+        assertEquals("New", updated.getName());
+        assertEquals(450, updated.getPointsRequired());
+        assertEquals(RewardItem.ItemType.VOUCHER, updated.getType());
+        assertEquals(9, updated.getStock());
+    }
+
+    @Test
+    void deleteCatalogItemDeletesExistingItem() {
+        RewardItem existing = RewardItem.builder().id(6L).name("ToDelete").build();
+        when(itemRepo.findById(6L)).thenReturn(Optional.of(existing));
+
+        rewardCommandService.deleteCatalogItem(6L);
+
+        verify(itemRepo).delete(existing);
+    }
+
+    @Test
     void redeemPointsThrowsWhenBelowMinimum() {
         RewardException exception = assertThrows(RewardException.class, () -> rewardCommandService.redeemPoints(1L, 50));
 

@@ -115,6 +115,33 @@ public class RewardCommandServiceImpl implements RewardCommandService {
                 .build());
     }
 
+    @Override
+    @Transactional
+    @CacheEvict(value = "reward-catalog", allEntries = true)
+    public RewardItem updateCatalogItem(Long rewardId, RewardItemRequest req) {
+        RewardItem item = itemRepo.findById(rewardId)
+                .orElseThrow(() -> new RewardException("Reward item not found", HttpStatus.NOT_FOUND));
+
+        item.setName(req.getName());
+        item.setDescription(req.getDescription());
+        item.setPointsRequired(req.getPointsRequired());
+        item.setType(RewardItem.ItemType.valueOf(req.getType()));
+        item.setStock(req.getStock());
+        item.setTierRequired(req.getTierRequired());
+        item.setCashbackAmount(req.getCashbackAmount());
+
+        return itemRepo.save(item);
+    }
+
+    @Override
+    @Transactional
+    @CacheEvict(value = "reward-catalog", allEntries = true)
+    public void deleteCatalogItem(Long rewardId) {
+        RewardItem item = itemRepo.findById(rewardId)
+                .orElseThrow(() -> new RewardException("Reward item not found", HttpStatus.NOT_FOUND));
+        itemRepo.delete(item);
+    }
+
     // ── REDEEM POINTS → WALLET CASH ───────────────────────────────────────────
     @Override
     @Transactional
