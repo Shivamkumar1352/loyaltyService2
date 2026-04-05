@@ -59,8 +59,7 @@ public class AdminUserServiceImpl implements AdminUserService {
         long kycPending    = kycRepo.countByStatus(KycDetail.KycStatus.PENDING);
         long kycApproved   = kycRepo.countByStatus(KycDetail.KycStatus.APPROVED);
         long kycRejected   = kycRepo.countByStatus(KycDetail.KycStatus.REJECTED);
-        long kycTotal      = kycPending + kycApproved + kycRejected;
-        long kycNotSub     = total - kycTotal;
+        long kycNotSub     = kycRepo.countByStatus(KycDetail.KycStatus.NOT_SUBMITTED);
 
         long kycApprToday  = kycRepo.countByStatusSince(KycDetail.KycStatus.APPROVED, startOfDay);
         long kycRejToday   = kycRepo.countByStatusSince(KycDetail.KycStatus.REJECTED, startOfDay);
