@@ -37,7 +37,7 @@ public class User {
     private String email;
 
     @NotBlank
-    @Pattern(regexp = "^[0-9]{10,15}$", message = "Phone must be 10-15 digits")
+    @Pattern(regexp = "^[0-9]{10}$", message = "Phone no. must be 10 digits")
     @Column(name = "phone", nullable = false, unique = true)
     private String phone;
 
