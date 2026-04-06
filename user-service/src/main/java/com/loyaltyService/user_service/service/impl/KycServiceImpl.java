@@ -53,8 +53,15 @@ public class KycServiceImpl implements KycService {
                 String docNumber, MultipartFile docFile) {
             User user = findUser(userId);
 
-            if (kycRepo.existsByUserIdAndStatus(userId, KycDetail.KycStatus.APPROVED))
-                throw new DuplicateKycException("KYC already approved for this user");
+            kycRepo.findFirstByUserIdOrderBySubmittedAtDesc(userId)
+                    .ifPresent(existingKyc -> {
+                        if (existingKyc.getStatus() == KycDetail.KycStatus.PENDING) {
+                            throw new DuplicateKycException("KYC is already submitted and pending review");
+                        }
+                        if (existingKyc.getStatus() == KycDetail.KycStatus.APPROVED) {
+                            throw new DuplicateKycException("KYC is already approved for this user");
+                        }
+                    });
 
 //            String filePath = null;
 //            if (docFile != null && !docFile.isEmpty()) {

@@ -6,11 +6,11 @@ import com.loyaltyService.user_service.entity.AuditLog;
 import com.loyaltyService.user_service.entity.KycDetail;
 import com.loyaltyService.user_service.entity.User;
 import com.loyaltyService.user_service.exception.DuplicateKycException;
-import com.loyaltyService.user_service.exception.ResourceNotFoundException;
 import com.loyaltyService.user_service.mapper.KycMapper;
 import com.loyaltyService.user_service.repository.AuditLogRepository;
 import com.loyaltyService.user_service.repository.KycRepository;
 import com.loyaltyService.user_service.repository.UserRepository;
+import com.loyaltyService.user_service.service.CloudinaryService;
 import com.loyaltyService.user_service.service.KafkaProducerService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -42,6 +42,8 @@ class KycServiceImplTest {
     private KafkaProducerService kafkaProducer;
     @Mock
     private KycMapper kycMapper;
+    @Mock
+    private CloudinaryService cloudinaryService;
 
     @InjectMocks
     private KycServiceImpl kycService;
@@ -59,7 +61,9 @@ class KycServiceImplTest {
     @Test
     void testSubmitKyc_Success() {
         when(userRepo.findById(1L)).thenReturn(Optional.of(testUser));
-        when(kycRepo.existsByUserIdAndStatus(1L, KycDetail.KycStatus.APPROVED)).thenReturn(false);
+        when(kycRepo.findFirstByUserIdOrderBySubmittedAtDesc(1L)).thenReturn(Optional.empty());
+        when(cloudinaryService.uploadFile(any(), eq(1L), eq(KycDetail.DocType.PAN.name())))
+                .thenReturn("cloudinary://kyc/doc");
         when(kycRepo.save(any(KycDetail.class))).thenReturn(testKyc);
         
         KycStatusResponse resMock = new KycStatusResponse();
@@ -76,12 +80,53 @@ class KycServiceImplTest {
     }
 
     @Test
+    void testSubmitKyc_AlreadyPending() {
+        when(userRepo.findById(1L)).thenReturn(Optional.of(testUser));
+        when(kycRepo.findFirstByUserIdOrderBySubmittedAtDesc(1L))
+                .thenReturn(Optional.of(KycDetail.builder()
+                        .id(99L)
+                        .user(testUser)
+                        .status(KycDetail.KycStatus.PENDING)
+                        .build()));
+
+        assertThrows(DuplicateKycException.class, () ->
+            kycService.submitKyc(1L, KycDetail.DocType.PAN, "ID123", null));
+    }
+
+    @Test
     void testSubmitKyc_AlreadyApproved() {
         when(userRepo.findById(1L)).thenReturn(Optional.of(testUser));
-        when(kycRepo.existsByUserIdAndStatus(1L, KycDetail.KycStatus.APPROVED)).thenReturn(true);
+        when(kycRepo.findFirstByUserIdOrderBySubmittedAtDesc(1L))
+                .thenReturn(Optional.of(KycDetail.builder()
+                        .id(99L)
+                        .user(testUser)
+                        .status(KycDetail.KycStatus.APPROVED)
+                        .build()));
 
-        assertThrows(DuplicateKycException.class, () -> 
+        assertThrows(DuplicateKycException.class, () ->
             kycService.submitKyc(1L, KycDetail.DocType.PAN, "ID123", null));
+    }
+
+    @Test
+    void testSubmitKyc_AfterRejected_AllowsResubmission() {
+        when(userRepo.findById(1L)).thenReturn(Optional.of(testUser));
+        when(kycRepo.findFirstByUserIdOrderBySubmittedAtDesc(1L))
+                .thenReturn(Optional.of(KycDetail.builder()
+                        .id(99L)
+                        .user(testUser)
+                        .status(KycDetail.KycStatus.REJECTED)
+                        .build()));
+        when(kycRepo.save(any(KycDetail.class))).thenReturn(testKyc);
+
+        KycStatusResponse resMock = new KycStatusResponse();
+        resMock.setStatus("PENDING");
+        when(kycMapper.toResponse(any())).thenReturn(resMock);
+
+        KycStatusResponse res = kycService.submitKyc(1L, KycDetail.DocType.PAN, "ID12345", null);
+
+        assertNotNull(res);
+        assertEquals("PENDING", res.getStatus());
+        verify(kycRepo).save(any(KycDetail.class));
     }
 
     @Test
@@ -99,6 +144,10 @@ class KycServiceImplTest {
     @Test
     void testGetStatus_NotFound() {
         when(kycRepo.findFirstByUserIdOrderBySubmittedAtDesc(1L)).thenReturn(Optional.empty());
-        assertThrows(ResourceNotFoundException.class, () -> kycService.getStatus(1L));
+
+        KycStatusResponse res = kycService.getStatus(1L);
+
+        assertNotNull(res);
+        assertEquals("NOT_SUBMITTED", res.getStatus());
     }
 }
