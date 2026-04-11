@@ -66,11 +66,18 @@ public class WalletCommandServiceImpl implements WalletCommandService {
     @Transactional
     @CacheEvict(value = "wallet-balance", key = "#userId")
     public void topup(Long userId, BigDecimal amount, String idempotencyKey) {
+        Transaction existingTxn = null;
         if (idempotencyKey != null) {
             Optional<Transaction> existing = txnRepo.findByIdempotencyKey(idempotencyKey);
             if (existing.isPresent()) {
-                log.info("Duplicate topup ignored: idempotencyKey={}", idempotencyKey);
-                return;
+                existingTxn = existing.get();
+                if (existingTxn.getStatus() == Transaction.TxnStatus.SUCCESS) {
+                    log.info("Duplicate topup ignored: idempotencyKey={}", idempotencyKey);
+                    return;
+                }
+                if (existingTxn.getStatus() != Transaction.TxnStatus.PENDING) {
+                    throw new WalletException("Top-up is not in a valid state for processing");
+                }
             }
         }
         WalletAccount acc = findActiveWallet(userId);
@@ -82,14 +89,23 @@ public class WalletCommandServiceImpl implements WalletCommandService {
         if (todayTotal.add(amount).compareTo(dailyTopupLimit) > 0)
             throw new WalletException("Daily top-up limit of ₹" + dailyTopupLimit + " exceeded");
 
-        String ref = "TOPUP_" + UUID.randomUUID();
+        String ref = existingTxn != null ? existingTxn.getReferenceId() : "TOPUP_" + UUID.randomUUID();
         ledgerService.record(userId, amount, LedgerEntry.EntryType.CREDIT, ref, "Wallet top-up");
         acc.credit(amount);
         accountRepo.save(acc);
-        txnRepo.save(Transaction.builder()
-                .receiverId(userId).amount(amount)
-                .status(Transaction.TxnStatus.SUCCESS).type(Transaction.TxnType.TOPUP)
-                .referenceId(ref).idempotencyKey(idempotencyKey).build());
+        if (existingTxn != null) {
+            existingTxn.setReceiverId(userId);
+            existingTxn.setAmount(amount);
+            existingTxn.setStatus(Transaction.TxnStatus.SUCCESS);
+            existingTxn.setType(Transaction.TxnType.TOPUP);
+            existingTxn.setDescription("Wallet top-up");
+            txnRepo.save(existingTxn);
+        } else {
+            txnRepo.save(Transaction.builder()
+                    .receiverId(userId).amount(amount)
+                    .status(Transaction.TxnStatus.SUCCESS).type(Transaction.TxnType.TOPUP)
+                    .referenceId(ref).idempotencyKey(idempotencyKey).build());
+        }
 
         // Publish Kafka event for Saga — reward-service consumes TOPUP_SUCCESS to earn
         // points

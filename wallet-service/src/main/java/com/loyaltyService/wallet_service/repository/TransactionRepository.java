@@ -25,6 +25,8 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
 
     Optional<Transaction> findByIdempotencyKey(String idempotencyKey);
 
+    Optional<Transaction> findByReferenceId(String referenceId);
+
     // ✅ FIXED
     @Query("""
         SELECT COALESCE(SUM(t.amount), 0)

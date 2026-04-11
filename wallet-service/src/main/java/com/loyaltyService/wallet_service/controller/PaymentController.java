@@ -1,17 +1,12 @@
 package com.loyaltyService.wallet_service.controller;
 
+import com.loyaltyService.wallet_service.dto.PaymentFailureRequest;
 import com.loyaltyService.wallet_service.dto.PaymentVerifyRequest;
-import com.loyaltyService.wallet_service.entity.Payment;
-import com.loyaltyService.wallet_service.repository.PaymentRepository;
-import com.loyaltyService.wallet_service.service.WalletCommandService;
-import com.loyaltyService.wallet_service.service.WalletQueryService;
 import com.loyaltyService.wallet_service.service.RazorpayService;
 import com.razorpay.Order;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import java.security.MessageDigest;
 
 import java.math.BigDecimal;
 import java.util.Map;
@@ -21,12 +16,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class PaymentController {
 
-        private final PaymentRepository paymentRepo;
         private final RazorpayService razorpayService;
-
-
-        @Value("${razorpay.secret}")
-        private String secret;
 
         @PostMapping("/create-order")
         public ResponseEntity<?> createOrder(
@@ -48,6 +38,19 @@ public class PaymentController {
                 try {
                         razorpayService.verifyPayment(userId, request);
                         return ResponseEntity.ok("Payment verified & wallet credited");
+                } catch (Exception e) {
+                        return ResponseEntity.badRequest().body(e.getMessage());
+                }
+        }
+
+        @PostMapping("/fail")
+        public ResponseEntity<?> markFailed(
+                @RequestHeader("X-User-Id") Long userId,
+                @RequestBody PaymentFailureRequest request) {
+
+                try {
+                        razorpayService.markPaymentFailed(userId, request);
+                        return ResponseEntity.ok("Payment marked failed");
                 } catch (Exception e) {
                         return ResponseEntity.badRequest().body(e.getMessage());
                 }

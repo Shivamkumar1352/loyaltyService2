@@ -83,6 +83,30 @@ class WalletCommandServiceImplTest {
     }
 
     @Test
+    void testTopup_FinalizesPendingTransaction() {
+        Transaction pendingTxn = Transaction.builder()
+                .receiverId(100L)
+                .amount(new BigDecimal("500.00"))
+                .status(Transaction.TxnStatus.PENDING)
+                .type(Transaction.TxnType.TOPUP)
+                .referenceId("order_123")
+                .idempotencyKey("ORD123")
+                .build();
+
+        when(accountRepo.findByUserId(100L)).thenReturn(Optional.of(testWallet));
+        when(txnRepo.findByIdempotencyKey("ORD123")).thenReturn(Optional.of(pendingTxn));
+        when(txnRepo.sumTodayTopups(eq(100L), eq(Transaction.TxnType.TOPUP), eq(Transaction.TxnStatus.SUCCESS), any(), any()))
+                .thenReturn(BigDecimal.ZERO);
+
+        walletCommandService.topup(100L, new BigDecimal("500"), "ORD123");
+
+        assertEquals(new BigDecimal("1500.00"), testWallet.getBalance());
+        assertEquals(Transaction.TxnStatus.SUCCESS, pendingTxn.getStatus());
+        verify(txnRepo, times(1)).save(pendingTxn);
+        verify(kafkaProducer, times(1)).send(eq("wallet-events"), anyMap());
+    }
+
+    @Test
     void testWithdraw_InsufficientBalance() {
         when(accountRepo.findByUserId(100L)).thenReturn(Optional.of(testWallet));
 
