@@ -139,8 +139,12 @@ public class AdminUserController {
     @Operation(summary = "Block a user")
     public ResponseEntity<ApiResponse<AdminUserResponse>> blockUser(
             @RequestHeader("X-User-Role") String role,
+            @RequestHeader("X-User-Id") Long adminId,
             @PathVariable Long userId) {
         requireAdmin(role);
+        if (adminId != null && adminId.equals(userId)) {
+            throw new BadRequestException("Admin cannot block themselves");
+        }
         return ResponseEntity.ok(ApiResponse.ok("User blocked", adminUserService.setStatus(userId, User.UserStatus.BLOCKED)));
     }
 

@@ -1,7 +1,10 @@
 package com.loyaltyService.wallet_service.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.loyaltyService.wallet_service.client.UserServiceClient;
+import com.loyaltyService.wallet_service.dto.ApiResponse;
 import com.loyaltyService.wallet_service.dto.TransferRequest;
+import com.loyaltyService.wallet_service.dto.UserLookupResponse;
 import com.loyaltyService.wallet_service.dto.WalletBalanceResponse;
 import com.loyaltyService.wallet_service.dto.WithdrawRequest;
 import com.loyaltyService.wallet_service.service.WalletCommandService;
@@ -34,6 +37,8 @@ class WalletControllerTest {
 
     @Mock
     private WalletCommandService walletCommandService;
+    @Mock
+    private UserServiceClient userServiceClient;
 
     @Mock
     private com.loyaltyService.wallet_service.repository.LedgerEntryRepository ledgerRepo;
@@ -93,5 +98,25 @@ class WalletControllerTest {
                 .andExpect(status().isOk());
 
         verify(walletCommandService, times(1)).withdraw(100L, new BigDecimal("100.00"));
+    }
+
+    @Test
+    void testTransferByEmail() throws Exception {
+        TransferRequest req = new TransferRequest();
+        req.setRecipientEmail("receiver@test.com");
+        req.setAmount(new BigDecimal("50.00"));
+        req.setIdempotencyKey("TXN124");
+        req.setDescription("Gift");
+
+        when(userServiceClient.findUserForTransfer("receiver@test.com", null))
+                .thenReturn(ApiResponse.ok("User found", UserLookupResponse.builder().id(200L).build()));
+
+        mockMvc.perform(post("/api/wallet/transfer")
+                .header("X-User-Id", "100")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(req)))
+                .andExpect(status().isOk());
+
+        verify(walletCommandService, times(1)).transfer(100L, 200L, new BigDecimal("50.00"), "TXN124", "Gift");
     }
 }

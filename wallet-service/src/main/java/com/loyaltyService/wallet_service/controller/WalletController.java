@@ -1,9 +1,11 @@
 package com.loyaltyService.wallet_service.controller;
 
+import com.loyaltyService.wallet_service.client.UserServiceClient;
 import com.loyaltyService.wallet_service.dto.*;
 import com.loyaltyService.wallet_service.entity.LedgerEntry;
 import com.loyaltyService.wallet_service.entity.Transaction;
 import com.loyaltyService.wallet_service.repository.LedgerEntryRepository;
+import com.loyaltyService.wallet_service.exception.WalletException;
 import com.loyaltyService.wallet_service.service.WalletCommandService;
 import com.loyaltyService.wallet_service.service.WalletQueryService;
 
@@ -41,6 +43,7 @@ public class WalletController {
     // CQRS: Command side (writes + cache eviction)
     private final WalletCommandService walletCommandService;
     private final LedgerEntryRepository ledgerRepo;
+    private final UserServiceClient userServiceClient;
 
     // ── Balance ───────────────────────────────────────────────────────────────
     @GetMapping("/balance")
@@ -50,23 +53,14 @@ public class WalletController {
         return ResponseEntity.ok(ApiResponse.ok("Balance fetched", walletQueryService.getBalance(userId)));
     }
 
-    // // ── Topup ─────────────────────────────────────────────────────────────────
-    // @PostMapping("/internal/topup")
-    // @Operation(summary = "Top up wallet")
-    // public ResponseEntity<ApiResponse<Void>> topup(
-    // @RequestHeader("X-User-Id") Long userId,
-    // @Valid @RequestBody TopupRequest req) {
-    // walletService.topup(userId, req.getAmount(), req.getIdempotencyKey());
-    // return ResponseEntity.ok(ApiResponse.ok("Top-up successful"));
-    // }
-
     // ── Transfer ──────────────────────────────────────────────────────────────
     @PostMapping("/transfer")
     @Operation(summary = "Transfer to another user")
     public ResponseEntity<ApiResponse<Void>> transfer(
             @RequestHeader("X-User-Id") Long senderId,
             @Valid @RequestBody TransferRequest req) {
-        walletCommandService.transfer(senderId, req.getReceiverId(), req.getAmount(),
+        Long receiverId = resolveReceiverId(req);
+        walletCommandService.transfer(senderId, receiverId, req.getAmount(),
                 req.getIdempotencyKey(), req.getDescription());
         return ResponseEntity.ok(ApiResponse.ok("Transfer successful"));
     }
@@ -158,5 +152,37 @@ public class WalletController {
             @RequestParam(defaultValue = "CASHBACK") String source) {
         walletCommandService.creditInternal(userId, amount, source);
         return ResponseEntity.ok(ApiResponse.ok("Credit applied"));
+    }
+
+    private Long resolveReceiverId(TransferRequest req) {
+        boolean hasId = req.getReceiverId() != null;
+        boolean hasEmail = hasText(req.getRecipientEmail());
+        boolean hasPhone = hasText(req.getRecipientPhone());
+        int provided = (hasId ? 1 : 0) + (hasEmail ? 1 : 0) + (hasPhone ? 1 : 0);
+
+        if (provided != 1) {
+            throw new WalletException("Provide exactly one recipient identifier: receiverId, recipientEmail, or recipientPhone");
+        }
+
+        if (hasId) {
+            return req.getReceiverId();
+        }
+
+        ApiResponse<UserLookupResponse> response = userServiceClient.findUserForTransfer(
+                hasEmail ? req.getRecipientEmail().trim() : null,
+                hasPhone ? req.getRecipientPhone().trim() : null
+        );
+
+        if (response == null || !response.isSuccess() || response.getData() == null || response.getData().getId() == null) {
+            throw new WalletException(response != null && response.getMessage() != null
+                    ? response.getMessage()
+                    : "Unable to resolve recipient");
+        }
+
+        return response.getData().getId();
+    }
+
+    private boolean hasText(String value) {
+        return value != null && !value.trim().isEmpty();
     }
 }

@@ -171,6 +171,9 @@ public class AdminUserServiceImpl implements AdminUserService {
         User user = findOrThrow(userId);
         user.setRole(newRole);
         userRepo.save(user);
+        authServiceClient.updateRole(
+                new AuthServiceClient.RoleUpdateRequest(userId, newRole.name())
+        );
         return adminUserMapper.toDto(user);
     }
 

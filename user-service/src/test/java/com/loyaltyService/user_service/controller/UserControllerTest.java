@@ -2,6 +2,7 @@ package com.loyaltyService.user_service.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.loyaltyService.user_service.dto.UpdateUserRequest;
+import com.loyaltyService.user_service.dto.UserLookupResponse;
 import com.loyaltyService.user_service.dto.UserProfileResponse;
 import com.loyaltyService.user_service.entity.User;
 import com.loyaltyService.user_service.service.UserCommandService;
@@ -94,5 +95,23 @@ class UserControllerTest {
                 .andExpect(status().isOk());
 
         verify(userCommandService, times(1)).createUser(1L, "New User", "new@test.com", "9998887776", User.Role.USER);
+    }
+
+    @Test
+    void testLookupUserForTransferByEmail() throws Exception {
+        UserLookupResponse response = UserLookupResponse.builder()
+                .id(10L)
+                .name("Receiver")
+                .email("receiver@test.com")
+                .phone("9998887776")
+                .build();
+
+        when(userQueryService.findUserForTransfer("receiver@test.com", null)).thenReturn(response);
+
+        mockMvc.perform(get("/api/users/internal/lookup")
+                .param("email", "receiver@test.com"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.id").value(10L))
+                .andExpect(jsonPath("$.data.email").value("receiver@test.com"));
     }
 }

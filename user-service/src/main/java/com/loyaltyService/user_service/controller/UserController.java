@@ -2,6 +2,7 @@ package com.loyaltyService.user_service.controller;
 
 import com.loyaltyService.user_service.dto.ApiResponse;
 import com.loyaltyService.user_service.dto.UpdateUserRequest;
+import com.loyaltyService.user_service.dto.UserLookupResponse;
 import com.loyaltyService.user_service.dto.UserProfileResponse;
 import com.loyaltyService.user_service.entity.User;
 import com.loyaltyService.user_service.service.UserCommandService;
@@ -56,6 +57,16 @@ public class UserController {
         return userQueryService.getUserProfile(id);
     }
 
+    @GetMapping("/internal/lookup")
+    public ResponseEntity<ApiResponse<UserLookupResponse>> lookupUserForTransfer(
+            @RequestParam(required = false) String email,
+            @RequestParam(required = false) String phone) {
+        return ResponseEntity.ok(ApiResponse.ok(
+                "User found",
+                userQueryService.findUserForTransfer(email, phone)
+        ));
+    }
+
     record CreateUserRequest(Long id, String name, String email, String phone, User.Role role) {
     }
 
@@ -63,4 +74,6 @@ public class UserController {
     public String getUserStatus(@PathVariable Long userId) {
         return userQueryService.getUserStatus(userId);
     }
+
+
 }

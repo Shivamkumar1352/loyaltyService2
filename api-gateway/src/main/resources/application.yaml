@@ -78,27 +78,6 @@ spring:
                     statuses: BAD_GATEWAY, SERVICE_UNAVAILABLE
                     methods: GET
 
-            # ── ADMIN SERVICE ─────────────────────────────────────
-#            - id: admin-service
-#              uri: lb://admin-service
-#              predicates:
-#                - Path=/api/admin/**
-#              filters:
-#                - JwtAuthenticationFilter   # ✅ FIXED
-#                - name: CircuitBreaker
-#                  args:
-#                    name: admin-cb
-#                    fallbackUri: forward:/fallback/admin
-
-            # ── FALLBACK ROUTE ────────────────────────────────────
-            - id: fallback-route
-              uri: http://localhost:${server.port}
-              predicates:
-                - Path=/fallback/**
-
-          default-filters:
-            - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
-
 # ── EUREKA ─────────────────────────────────────────────────────
 eureka:
   client:

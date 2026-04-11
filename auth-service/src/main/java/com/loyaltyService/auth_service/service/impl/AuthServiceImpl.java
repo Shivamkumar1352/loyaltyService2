@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.Map;
+import java.util.Locale;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
@@ -260,6 +261,25 @@ public class AuthServiceImpl implements AuthService {
         userRepository.save(user);
 
         log.info("User status updated from user-service: userId={}, status={}", userId, status);
+    }
+
+    @Override
+    @Transactional
+    public void updateRole(Long userId, String role) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new AuthException("User not found", HttpStatus.NOT_FOUND));
+
+        User.Role newRole;
+        try {
+            newRole = User.Role.valueOf(role.toUpperCase(Locale.ROOT));
+        } catch (IllegalArgumentException ex) {
+            throw new AuthException("Invalid role: " + role, HttpStatus.BAD_REQUEST);
+        }
+
+        user.setRole(newRole);
+        userRepository.save(user);
+
+        log.info("User role updated from user-service: userId={}, role={}", userId, newRole);
     }
 
 

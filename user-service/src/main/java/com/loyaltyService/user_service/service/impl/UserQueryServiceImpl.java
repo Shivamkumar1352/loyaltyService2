@@ -1,7 +1,9 @@
 package com.loyaltyService.user_service.service.impl;
 
 import com.loyaltyService.user_service.dto.UserProfileResponse;
+import com.loyaltyService.user_service.dto.UserLookupResponse;
 import com.loyaltyService.user_service.entity.User;
+import com.loyaltyService.user_service.exception.BadRequestException;
 import com.loyaltyService.user_service.exception.ResourceNotFoundException;
 import com.loyaltyService.user_service.mapper.UserMapper;
 import com.loyaltyService.user_service.repository.KycRepository;
@@ -51,6 +53,29 @@ public class UserQueryServiceImpl implements UserQueryService {
                 : "ACTIVE";
     }
 
+    @Override
+    public UserLookupResponse findUserForTransfer(String email, String phone) {
+        boolean hasEmail = hasText(email);
+        boolean hasPhone = hasText(phone);
+
+        if (hasEmail == hasPhone) {
+            throw new BadRequestException("Provide exactly one of email or phone");
+        }
+
+        User user = hasEmail
+                ? userRepo.findByEmail(email.trim())
+                    .orElseThrow(() -> new ResourceNotFoundException("No user with email: " + email))
+                : userRepo.findByPhone(phone.trim())
+                    .orElseThrow(() -> new ResourceNotFoundException("No user with phone: " + phone));
+
+        return UserLookupResponse.builder()
+                .id(user.getId())
+                .name(user.getName())
+                .email(user.getEmail())
+                .phone(user.getPhone())
+                .build();
+    }
+
     // ── Helpers ──────────────────────────────────────────────────────────────
 
     private UserProfileResponse buildUserProfile(Long userId) {
@@ -65,5 +90,9 @@ public class UserQueryServiceImpl implements UserQueryService {
     private User findUser(Long id) {
         return userRepo.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found: " + id));
+    }
+
+    private boolean hasText(String value) {
+        return value != null && !value.trim().isEmpty();
     }
 }

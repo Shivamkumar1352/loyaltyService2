@@ -13,7 +13,12 @@ public interface AuthServiceClient {
     @PutMapping("/api/auth/internal/status")   // 🔥 NEW
     void updateStatus(@RequestBody StatusUpdateRequest request);
 
+    @PutMapping("/api/auth/internal/role")
+    void updateRole(@RequestBody RoleUpdateRequest request);
+
     record UpdateProfileRequest(Long userId, String name, String phone) {}
 
     record StatusUpdateRequest(Long userId, String status) {} // 🔥 NEW
+
+    record RoleUpdateRequest(Long userId, String role) {}
 }

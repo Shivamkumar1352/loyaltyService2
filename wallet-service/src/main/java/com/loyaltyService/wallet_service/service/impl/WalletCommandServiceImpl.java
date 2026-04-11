@@ -161,6 +161,7 @@ public class WalletCommandServiceImpl implements WalletCommandService {
         log.info("Transfer success: from={}, to={}, amount={}, ref={}", senderId, receiverId, amount, ref);
     }
 
+
     // ── Withdraw ──────────────────────────────────────────────────────────────
     @Override
     @Transactional
