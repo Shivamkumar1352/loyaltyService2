@@ -20,6 +20,11 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
             .body(ApiResponse.<Void>builder().success(false).message(ex.getMessage()).build());
     }
+    @ExceptionHandler(WalletServiceUnavailableException.class)
+    public ResponseEntity<ApiResponse<Void>> notFound(WalletServiceUnavailableException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(ApiResponse.<Void>builder().success(false).message(ex.getMessage()).build());
+    }
     @ExceptionHandler(DuplicateKycException.class)
     public ResponseEntity<ApiResponse<Void>> duplicate(DuplicateKycException ex) {
         return ResponseEntity.status(HttpStatus.CONFLICT)

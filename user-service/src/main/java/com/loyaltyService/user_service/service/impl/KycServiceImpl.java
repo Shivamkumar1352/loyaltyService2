@@ -7,6 +7,7 @@ import com.loyaltyService.user_service.entity.KycDetail;
 import com.loyaltyService.user_service.entity.User;
 import com.loyaltyService.user_service.exception.DuplicateKycException;
 import com.loyaltyService.user_service.exception.ResourceNotFoundException;
+import com.loyaltyService.user_service.exception.WalletServiceUnavailableException;
 import com.loyaltyService.user_service.mapper.KycMapper;
 import com.loyaltyService.user_service.repository.AuditLogRepository;
 import com.loyaltyService.user_service.repository.KycRepository;
@@ -220,6 +221,8 @@ public class KycServiceImpl implements KycService {
             log.info("Wallet created for userId={} after KYC approval", userId);
         } catch (Exception e) {
             log.error("Failed to create wallet for userId={}", userId, e);
+            throw new WalletServiceUnavailableException(
+                    "Wallet service is currently unavailable.");
         }
 
         log.info("KYC approved: kycId={}, userId={}, by={}", kyc.getId(), userId, adminEmail);
